@@ -4,7 +4,9 @@
         {% block head %}
             <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
         {% endblock %}
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <link href="{{ asset('/bundles/chrisdisswebsite/css/chrisdiss.css') }}" rel="stylesheet" />
+        {% endblock %}
     </head>
     <body
         {% if bodyid is defined %}id="{{ bodyid }}"{% endif %}

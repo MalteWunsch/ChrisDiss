@@ -1,8 +1,9 @@
 {% extends 'ChrisDissWebsiteBundle::layout.html.twig' %}
 
-{% set bodyid = 'instructions' %}
+{% set bodyid = 'initialInstructions' %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link href="{{ asset('/bundles/chrisdisswebsite/css/initialInstructions.css') }}" rel="stylesheet" />
 {% endblock %}
 
