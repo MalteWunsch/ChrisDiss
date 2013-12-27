@@ -1,0 +1,3 @@
+# ChrisDissWebsiteBundle routes
+ChrisDissWebsiteBundle:
+    resource: "@ChrisDissWebsiteBundle/Resources/config/routing.yml"

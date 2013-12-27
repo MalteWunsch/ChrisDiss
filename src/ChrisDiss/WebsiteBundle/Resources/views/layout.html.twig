@@ -1,0 +1,23 @@
+{# base layout #}
+<html>
+    <head>
+        {% block head %}
+            <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+            {% endblock %}
+    </head>
+    <body>
+        <h1>{% block title %}ChrisDiss{% endblock %}</h1>
+
+        {% block body %}
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-message">
+                    <em>Notice</em>: {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        {% endblock %}
+    </body>
+</html>
