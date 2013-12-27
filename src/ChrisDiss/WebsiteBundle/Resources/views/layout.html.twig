@@ -1,5 +1,5 @@
 {# base layout #}
-<html>
+<html ng-app>
     <head>
         {% block head %}
             <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
@@ -10,6 +10,8 @@
     </head>
     <body
         {% if bodyid is defined %}id="{{ bodyid }}"{% endif %}
+        {% if ngController is defined %}ng-controller="{{ ngController }}"{% endif %}
+        {% if ngKeypress is defined %}ng-keypress="{{ ngKeypress }}"{% endif %}
     >
         <h1>{% block title %}ChrisDiss{% endblock %}</h1>
 
@@ -25,6 +27,9 @@
             </div>
         {% endblock %}
 
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+        {% endblock %}
     </body>
 </html>
