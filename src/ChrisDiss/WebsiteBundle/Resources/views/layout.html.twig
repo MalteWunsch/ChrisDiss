@@ -3,9 +3,12 @@
     <head>
         {% block head %}
             <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-            {% endblock %}
+        {% endblock %}
+        {% block stylesheets %}{% endblock %}
     </head>
-    <body>
+    <body
+        {% if bodyid is defined %}id="{{ bodyid }}"{% endif %}
+    >
         <h1>{% block title %}ChrisDiss{% endblock %}</h1>
 
         {% block body %}
@@ -19,5 +22,7 @@
                 {% block content %}{% endblock %}
             </div>
         {% endblock %}
+
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

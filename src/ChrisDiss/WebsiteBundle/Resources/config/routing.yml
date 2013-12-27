@@ -1,3 +1,7 @@
-homepage:
+initialInstructions:
     pattern:  /
-    defaults: { _controller: ChrisDissWebsiteBundle:Website:index }
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:initialInstructions }
+
+dryRun:
+    pattern:  /uebungsaufgaben
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:dryRun }

@@ -10,12 +10,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class WebsiteController extends Controller
 {
     /**
-     * First page where a users enters.
+     * First page where a users enters displaying the instructions.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function initialInstructionsAction()
     {
-        return $this->render('ChrisDissWebsiteBundle:Website:index.html.twig');
+        return $this->render('ChrisDissWebsiteBundle:Website:initialInstructions.html.twig');
     }
 }

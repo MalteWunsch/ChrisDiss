@@ -1,0 +1,45 @@
+.underline {
+    text-decoration: underline;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.red {
+    color: #f00;
+}
+
+div.blood-tube, div.tube-box {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 60px;
+}
+
+div.blood-tube {
+    width: 454px;
+    height: 95px;
+    background-image: url('../images/blood-tube.gif');
+    padding-top: 28px;
+}
+
+div.tube-box {
+    width: 445px;
+    height: 73px;
+    background-image: url('../images/tube-box.gif');
+    padding-top: 50px;
+    color: #FFF;
+}
+
+div.important {
+    border: 1px solid blue;
+}
+
+div.image-keyboard {
+    width: 708px;
+    height: 163px;
+    background-image: url('../images/initialInstructions/keyboard.png');
+    margin-left: auto;
+    margin-right: auto;
+}

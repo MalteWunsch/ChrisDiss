@@ -1,0 +1,66 @@
+{% extends 'ChrisDissWebsiteBundle::layout.html.twig' %}
+
+{% set bodyid = 'instructions' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('/bundles/chrisdisswebsite/css/initialInstructions.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block title %}Anleitung{% endblock %}
+
+{% block content %}
+    <p>
+        Eine neue Lieferung Blutröhrchen ist eingetroffen. Die neue Praktikantin in der Praxis sollte die Röhrchen
+        sortieren, hat dabei aber versehentlich alles durcheinander gebracht. Deshalb müssen Sie nun wieder Ordnung
+        schaffen.
+    </p>
+    <p>
+        Im folgenden werden Ihnen Bilder von Blutröhrchen gezeigt. Jedes Röhrchen wurde von der Praktikantin farblich
+        beschriftet. Dabei hat sie allerdings manchmal den richtigen Farbstift benutzt, aber das falsche Wort
+        hingeschrieben. Hier im Beispiel steht daher in <span class="red">roten</span> Buchstaben das Wort "BLAU".
+    </p>
+    <div class="blood-tube">
+        <span class="red">BLAU</span>
+    </div>
+    <p>
+        Zusätzlich wird Ihnen zu jedem Blutröhrchen ein entsprechendes Fach angezeigt. Jedes Fach ist mit einem Farbwort
+        beschriftet, also wie hier mit "ROT".
+    </p>
+    <div class="tube-box">
+        ROT
+    </div>
+    <p>
+        Ihre Aufgabe ist es nun, <span class="underline bold">so schnell wie möglich zu entscheiden, ob die tatsächliche
+        Farbe des Blutröhrchens (hier <span class="red">rot</span>) und die Beschriftung des Fachs (hier das Wort "ROT")
+        übereinstimmen</span> oder nicht. Im Beispiel stimmen Sie überein.
+    </p>
+    <p>
+        Wenn die Farbe und das Fach <span class="underline bold">übereinstimmen</span>, drücken Sie bitte die Taste
+        <span class="bold">Y</span> auf Ihrer Tastatur.
+    </p>
+    <p>
+        Wenn die Farbe und das Fach <span class="underline bold">nicht übereinstimmen</span>, drücken Sie bitte die
+        Taste <span class="bold">N</span> auf Ihrer Tastatur.
+    </p>
+
+    <div class="important">
+        <p>
+            Wenn Sie sich <span class="underline bold">vertippt</span> haben, drücken Sie bitte einmal auf die
+            <span class="bold">Leertaste</span>. Hierdurch machen Sie deutlich, dass Ihnen der Tippfehler aufgefallen
+            ist und der Fehler wird nicht bewertet.
+        </p>
+        <div class="image-keyboard"></div>
+        <p>
+            Wichtig ist außerdem, dass Sie die Tasten <span class="underline bold">so schnell wie möglich
+            eintippen</span>, da Ihnen jedes Blutröhrchen <span class="underline bold">nur 3 Sekunden</span> lang
+            gezeigt wird.
+        </p>
+        <p>
+            Sie können zunächst einige Übungsaufgaben bearbeiten.
+        </p>
+    </div>
+
+    <p>
+        <a href="{{ path('dryRun') }}">Zu den Übungsaufgaben</a>
+    </p>
+{% endblock %}
