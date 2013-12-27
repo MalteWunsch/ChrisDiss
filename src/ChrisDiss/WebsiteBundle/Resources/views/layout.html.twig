@@ -13,15 +13,11 @@
         {% if ngController is defined %}ng-controller="{{ ngController }}"{% endif %}
         {% if ngKeypress is defined %}ng-keypress="{{ ngKeypress }}"{% endif %}
     >
-        <h1>{% block title %}ChrisDiss{% endblock %}</h1>
+        {% if heading is defined %}
+            <h1>{{ heading }}</h1>
+        {% endif %}
 
         {% block body %}
-            {% for flashMessage in app.session.flashbag.get('notice') %}
-                <div class="flash-message">
-                    <em>Notice</em>: {{ flashMessage }}
-                </div>
-            {% endfor %}
-
             <div class="content">
                 {% block content %}{% endblock %}
             </div>
