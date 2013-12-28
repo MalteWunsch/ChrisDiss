@@ -5,6 +5,8 @@ html {
 
 div#afterDryRun {
     display:none;
+    width: 650px;
+    margin:auto;
 }
 
 div.content {
@@ -15,9 +17,4 @@ div.content {
     bottom: 0;
     right: 0;
     margin: auto;
-}
-
-div#afterDryRun {
-    width: 650px;
-    margin:auto;
 }

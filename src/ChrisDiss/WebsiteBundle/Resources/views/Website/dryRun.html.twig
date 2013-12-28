@@ -2,7 +2,7 @@
 
 {% set bodyid = 'dryRun' %}
 {% set ngController = 'DryRunCtrl' %}
-{% set ngKeypress = 'getNewQuestion()' %}
+{% set ngKeypress = 'setNextQuestion()' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -20,11 +20,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="blood-tube">
-        <span style="color:#{{ '{{question.getColourHex()}}' }}">{{ '{{question.getColourName()}}' }}</span>
-    </div>
-    <div class="tube-box">
-        {{ '{{question.getBoxColourName()}}' }}
+    <div id="question">
+        <div class="blood-tube">
+            <span style="color:#{{ '{{question.getColourHex()}}' }}">{{ '{{question.getColourName()}}' }}</span>
+        </div>
+        <div class="tube-box">
+            {{ '{{question.getBoxColourName()}}' }}
+        </div>
     </div>
 
     <div id="afterDryRun">
