@@ -5,3 +5,7 @@ initialInstructions:
 dryRun:
     pattern:  /uebungsaufgaben
     defaults: { _controller: ChrisDissWebsiteBundle:Website:dryRun }
+
+testung:
+    pattern:  /testung
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:testung }

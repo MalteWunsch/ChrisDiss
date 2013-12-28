@@ -1,0 +1,23 @@
+html {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+div#afterDryRun {
+    display:none;
+}
+
+div.content {
+    height:220px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+div#afterDryRun {
+    width: 650px;
+    margin:auto;
+}

@@ -1,0 +1,49 @@
+{% extends 'ChrisDissWebsiteBundle::layout.html.twig' %}
+
+{% set bodyid = 'dryRun' %}
+{% set ngController = 'DryRunCtrl' %}
+{% set ngKeypress = 'getNewQuestion()' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/chrisdisswebsite/css/dryRun.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# TODO: proper import management #}
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/Colour.js') }}"></script>
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/ColourFactory.js') }}"></script>
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/Question.js') }}"></script>
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/QuestionFactory.js') }}"></script>
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/dryRun.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="blood-tube">
+        <span style="color:#{{ '{{question.getColourHex()}}' }}">{{ '{{question.getColourName()}}' }}</span>
+    </div>
+    <div class="tube-box">
+        {{ '{{question.getColourName()}}' }}
+    </div>
+
+    <div id="afterDryRun">
+        <p>
+            Sie haben den Probelauf beendet und können nun mit der eigentlichen Testung beginnen.
+        </p>
+        <p>
+            Ab jetzt wird Ihnen keine Rückmeldung mehr gegeben, ob Sie richtig oder falsch geantwortet haben.
+        </p>
+        <p>
+            Deshalb denken Sie daran:
+        </p>
+        <ul class="bold">
+            <li>"Y" bei Übereinstimmung von Farbe und Fach, "N" bei Nicht-Übereinstimmung</li>
+            <li>Leertaste drücken, wenn vertippt</li>
+            <li>möglichst schnell antworten</li>
+        </ul>
+        <p>
+            <a href="{{ path('testung') }}">Mit der Testung beginnen</a>
+        </p>
+    </div>
+{% endblock %}

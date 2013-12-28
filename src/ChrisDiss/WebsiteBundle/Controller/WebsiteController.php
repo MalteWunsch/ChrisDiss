@@ -18,4 +18,12 @@ class WebsiteController extends Controller
     {
         return $this->render('ChrisDissWebsiteBundle:Website:initialInstructions.html.twig');
     }
+
+    /**
+     * After reading the initial instructions, a user takes a dry run to get to know the quiz mechanics.
+     */
+    public function dryRunAction()
+    {
+        return $this->render('ChrisDissWebsiteBundle:Website:dryRun.html.twig');
+    }
 }
