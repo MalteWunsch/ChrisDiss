@@ -17,6 +17,7 @@
     <script src="{{ asset('/bundles/chrisdisswebsite/js/ColourFactory.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/Question.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/QuestionFactory.js') }}"></script>
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/Answer.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/AnswerEvaluations.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/dryRun.js') }}"></script>
 {% endblock %}
@@ -27,7 +28,7 @@
             .
         </div>
         <div id="answerEvaluation">
-            {{ '{{getAnswerEvaluation().getMessage()}}' }}
+            {{ '{{getAnswerEvaluationAsText()}}' }}
         </div>
         <div id="question">
             <div class="blood-tube">
@@ -62,7 +63,7 @@
         Bei Vertippen: Leertaste
     </div>
     <div id="lockedAnswer" class="key">
-        {{ '{{getLockedAnswer()}}' }}
+        {{ '{{answer.getLetter()}}' }}
     </div>
     <div id="answerMarkedErroneous" class="key">
         &nbsp;

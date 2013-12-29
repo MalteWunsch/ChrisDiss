@@ -51,13 +51,6 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.durationOfAnswerEvaluationInMilliseconds = 3000;
 
     /**
-     * Whether an answer can be entered now.
-     *
-     * @type {boolean}
-     */
-    $scope.answerCanBeEnteredNow = false;
-
-    /**
      * Current Question.
      *
      * @type {Question|null}
@@ -65,40 +58,11 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.question = null;
 
     /**
-     * Constant letter for giving the "Colour on the tube box is correct" answer.
+     * Locked answer to the current question.
      *
-     * @type {string}
+     * @type {Answer|null}
      */
-    $scope.letterForYes = "y";
-
-    /**
-     * Constant letter for giving the "Colour on the tube box is not correct" answer.
-     *
-     * @type {string}
-     */
-    $scope.letterForNo = "n";
-
-    /**
-     * Constant letter for marking an answer as erroneous.
-     *
-     * @type {string}
-     */
-    $scope.letterForMarkingAnswerAsErroneous = " ";
-
-    /**
-     * Locked lower cased letter of the key the user has pressed. Only strokes on allowed keys are locked.
-     *
-     * @type {string|null}
-     */
-    $scope.lockedLetter = null;
-
-    /**
-     * Whether the user marked his answer to the current question as erroneous (whether he is correct in that mark or
-     * not).
-     *
-     * @type {boolean}
-     */
-    $scope.answerMarkedErroneous = false;
+    $scope.answer = null;
 
     /**
      * Manage the quiz control flow.
@@ -129,35 +93,21 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * 4) user entered wrong key and entered the "error noticed" key
      * 5) user entered correct key but entered the "error noticed" key
      *
-     * @returns {AnswerEvaluation}
+     * @returns {string}
      */
-    $scope.getAnswerEvaluation = function () {
-        if (this.lockedLetter === null) {
-            return new NoAnswerEvaluation();
-        }
-
-        if (this.answerMarkedErroneous === false) {
-            if ($scope.getLockedAnswerAsBoolean() === this.question.getCorrectAnswer()) {
-                return new CorrectAnswerEvaluation();
-            }
-            return new WrongAnswerEvaluation();
-        }
-
-        if ($scope.getLockedAnswerAsBoolean() === this.question.getCorrectAnswer()) {
-            return new WronglyMarkedAnswerAsWrongEvaluation();
-        }
-        return new CorrectlyMarkedAnswerAsWrongEvaluation();
+    $scope.getAnswerEvaluationAsText = function () {
+        return Answer.getEvaluation(this.answer, this.question)
+                     .getMessage();
     };
 
     /**
      * Manages giving the user another Question. For the time-dependant parts which show and hide DOM elements, this is
      * timeIndex = 0.
      */
-    $scope.manageAnotherQuestion = function() {
+    $scope.manageAnotherQuestion = function () {
         $scope.displayFocusMark();
         $scope.displayQuestion();
         $scope.displayAnswerEvaluation();
-        $scope.removeAnswer();
         $scope.setNextQuestion();
     };
 
@@ -199,14 +149,14 @@ function DryRunCtrl($scope, $interval, $timeout) {
         $timeout(
             function () {
                 $('.tube-box, #errorDetectionNotice').show();
-                $scope.answerCanBeEnteredNow = true;
+                Answer.setCanBeEnteredNow(true);
             },
             timeIndex + $scope.delayBeforeTubeBoxInMilliseconds
         );
         $timeout(
             function () {
                 $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
-                $scope.answerCanBeEnteredNow = false;
+                Answer.setCanBeEnteredNow(false);
             },
             timeIndex + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds
         );
@@ -235,17 +185,9 @@ function DryRunCtrl($scope, $interval, $timeout) {
     /**
      * Manage the end of the dry run after the user has answered all Questions.
      */
-    $scope.manageEndOfDryRun = function() {
+    $scope.manageEndOfDryRun = function () {
         $interval.cancel(manageQuizInterval);
         $('#endOfDryRun').show();
-    };
-
-    /**
-     * Removes the current answer.
-     */
-    $scope.removeAnswer = function () {
-        this.lockedLetter = null;
-        this.answerMarkedErroneous = false;
     };
 
     /**
@@ -259,6 +201,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
             this.question = QuestionFactory.getStroopQuestion(true);
         }
         $scope.currentQuestionNumber += 1;
+        this.answer = null;
     };
 
     /**
@@ -267,42 +210,21 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * @param event the key press event
      */
     $scope.handleUserInput = function (event) {
-        var keyCodeForYes, keyCodeForNo, keyCodeForMarkingAnswerAsErroneous, pressedKeyCode;
+        var lowerCaseChar = String.fromCharCode(
+            KeyCodeHelper.shiftKeyCodeToLowerCasedLetterIfApplicable(event.which)
+        );
 
-        if ($scope.answerCanBeEnteredNow === true) {
-            keyCodeForYes = this.letterForYes.charCodeAt(0);
-            keyCodeForNo = this.letterForNo.charCodeAt(0);
-            keyCodeForMarkingAnswerAsErroneous = this.letterForMarkingAnswerAsErroneous.charCodeAt(0);
-            pressedKeyCode = KeyCodeHelper.shiftKeyCodeToLowerCasedLetterIfApplicable(event.which);
-
-            if (this.lockedLetter === null) {
-                if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
-                    this.lockedLetter = String.fromCharCode(pressedKeyCode);
+        if (Answer.getCanBeEnteredNow() === true) {
+            if (this.answer === null) {
+                if (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo()) {
+                    this.answer = new Answer(lowerCaseChar);
                     $('#lockedAnswer').show();
                 }
-            } else if (pressedKeyCode === keyCodeForMarkingAnswerAsErroneous) {
-                this.answerMarkedErroneous = true;
+            } else if (lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
+                this.answer.markAsErroneous();
                 $('#answerMarkedErroneous').show();
             }
         }
-    };
-
-    /**
-     * Gets the locked answer, i.e. the letter of the pressed key.
-     *
-     * @returns {string}
-     */
-    $scope.getLockedAnswer = function () {
-        return this.lockedLetter.toUpperCase();
-    };
-
-    /**
-     * Returns whether the locked answer is that the Colour on the tube box is correct.
-     *
-     * @returns {boolean}
-     */
-    $scope.getLockedAnswerAsBoolean = function () {
-        return (this.lockedLetter === this.letterForYes);
     };
 
     /**
