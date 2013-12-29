@@ -123,13 +123,6 @@ function DryRunCtrl($scope, $interval, $timeout) {
     };
 
     /**
-     * Get the human readable message of the answer's evaluation.
-     */
-    $scope.getAnswerEvaluationAsText = function () {
-        return $scope.getAnswerEvaluation().getMessage();
-    };
-
-    /**
      * Get the one of five possible evaluation of the user's answer:
      * 1) user entered no (allowed) key at all
      * 2) user entered correct key and did not enter the "error noticed" key
