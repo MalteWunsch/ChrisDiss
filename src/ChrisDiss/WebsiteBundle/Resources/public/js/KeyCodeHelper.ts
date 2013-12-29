@@ -9,7 +9,7 @@ class KeyCodeHelper {
      * @param keyCode number
      * @returns {number}
      */
-    public static shiftKeyCodeToLowercasedLetterIfApplicable = function (keyCode: number) {
+    public static shiftKeyCodeToLowerCasedLetterIfApplicable = function (keyCode: number) {
         var lowerCasedKeyCode = keyCode;
         if (keyCode >= 65 && keyCode <= 90) {
             lowerCasedKeyCode += 32;

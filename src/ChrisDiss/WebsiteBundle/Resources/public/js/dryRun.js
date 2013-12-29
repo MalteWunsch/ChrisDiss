@@ -86,12 +86,11 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.letterForMarkingAnswerAsErroneous = " ";
 
     /**
-     * Locked ascii code of the uppercased letter of the key the user has pressed. Only allowed strokes on allowed keys
-     * are locked.
+     * Locked lower cased letter of the key the user has pressed. Only strokes on allowed keys are locked.
      *
-     * @type {number|null}
+     * @type {string|null}
      */
-    $scope.lockedKeyCode = null;
+    $scope.lockedLetter = null;
 
     /**
      * Whether the user marked his answer to the current question as erroneous (whether he is correct in that mark or
@@ -133,7 +132,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * @returns {AnswerEvaluation}
      */
     $scope.getAnswerEvaluation = function () {
-        if (this.lockedKeyCode === null) {
+        if (this.lockedLetter === null) {
             return new NoAnswerEvaluation();
         }
 
@@ -245,7 +244,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * Removes the current answer.
      */
     $scope.removeAnswer = function () {
-        this.lockedKeyCode = null;
+        this.lockedLetter = null;
         this.answerMarkedErroneous = false;
     };
 
@@ -274,11 +273,11 @@ function DryRunCtrl($scope, $interval, $timeout) {
             keyCodeForYes = this.letterForYes.charCodeAt(0);
             keyCodeForNo = this.letterForNo.charCodeAt(0);
             keyCodeForMarkingAnswerAsErroneous = this.letterForMarkingAnswerAsErroneous.charCodeAt(0);
-            pressedKeyCode = KeyCodeHelper.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
+            pressedKeyCode = KeyCodeHelper.shiftKeyCodeToLowerCasedLetterIfApplicable(event.which);
 
-            if (this.lockedKeyCode === null) {
+            if (this.lockedLetter === null) {
                 if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
-                    this.lockedKeyCode = pressedKeyCode;
+                    this.lockedLetter = String.fromCharCode(pressedKeyCode);
                     $('#lockedAnswer').show();
                 }
             } else if (pressedKeyCode === keyCodeForMarkingAnswerAsErroneous) {
@@ -294,7 +293,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * @returns {string}
      */
     $scope.getLockedAnswer = function () {
-        return String.fromCharCode(this.lockedKeyCode).toUpperCase();
+        return this.lockedLetter.toUpperCase();
     };
 
     /**
@@ -303,7 +302,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * @returns {boolean}
      */
     $scope.getLockedAnswerAsBoolean = function () {
-        return (this.lockedKeyCode === this.letterForYes.charCodeAt(0));
+        return (this.lockedLetter === this.letterForYes);
     };
 
     /**
