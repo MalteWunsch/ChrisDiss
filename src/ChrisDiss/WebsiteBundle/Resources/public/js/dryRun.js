@@ -51,14 +51,24 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.lockedKeyCode = null;
 
     /**
+     * Whether the user marked his answer to the current question as erroneous (whether he is correct in that mark or
+     * not).
+     *
+     * @type {boolean}
+     */
+    $scope.answerMarkedErroneous = false;
+
+    /**
      * Manage the quiz: display Questions, evaluate user input...
      */
     $scope.manageQuiz = function () {
         $('#lockedAnswer').hide();
+        $('#answerMarkedErroneous').hide();
         if ($scope.currentQuestionNumber <= $scope.numberOfQuestions) {
             $scope.displayBlackScreen();
             $scope.setNextQuestion();
             this.lockedKeyCode = null;
+            this.answerMarkedErroneous = false;
             $scope.currentQuestionNumber += 1;
         } else {
             $interval.cancel(manageQuizInterval);
@@ -96,13 +106,17 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.handleUserInput = function (event) {
         var keyCodeForYes = "y".charCodeAt(0),
             keyCodeForNo = "n".charCodeAt(0),
+            keyCodeForMarkingAnswerAsErroneous = " ".charCodeAt(0),
             pressedKeyCode = $scope.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
 
-        if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
-            if (this.lockedKeyCode === null) {
+        if (this.lockedKeyCode === null) {
+            if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
                 this.lockedKeyCode = pressedKeyCode;
                 $('#lockedAnswer').show();
             }
+        } else if (pressedKeyCode === keyCodeForMarkingAnswerAsErroneous) {
+            this.answerMarkedErroneous = true;
+            $('#answerMarkedErroneous').show();
         }
     };
 
