@@ -1,5 +1,7 @@
 /**
- * The Answer class ...
+ * A user's Answer to a Question originates from the letter key a user presses during a special time frame (when the
+ * Question as a whole is displayed). After that, they can mark it as erroneous. A user's answer is not guaranteed to be
+ * correct, so it can be evaluated.
  */
 class Answer {
     /**
