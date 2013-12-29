@@ -8,15 +8,22 @@ var ColourFactory = (function () {
         new Colour('pink', 'ff00ff'), 
         new Colour('türkis', '00ffff')
     ];
-    ColourFactory.getRandomColour = function getRandomColour() {
-        var index = Math.floor(Math.random() * this.colours.length);
-        return this.colours[index];
+    ColourFactory.dryRunColours = [
+        new Colour('rot', 'ff0000'), 
+        new Colour('blau', '0000ff')
+    ];
+    ColourFactory.getRandomColour = function getRandomColour(colourSetForDryRun) {
+        var index;
+        var colourSet = (colourSetForDryRun === true) ? this.dryRunColours : this.colours;
+
+        index = Math.floor(Math.random() * colourSet.length);
+        return colourSet[index];
     }
-    ColourFactory.getTwoDistinctColours = function getTwoDistinctColours() {
-        var firstColour = this.getRandomColour();
-        var secondColour = this.getRandomColour();
+    ColourFactory.getTwoDistinctColours = function getTwoDistinctColours(colourSetForDryRun) {
+        var firstColour = this.getRandomColour(colourSetForDryRun);
+        var secondColour = this.getRandomColour(colourSetForDryRun);
         while(secondColour === firstColour) {
-            secondColour = this.getRandomColour();
+            secondColour = this.getRandomColour(colourSetForDryRun);
         }
         return [
             firstColour, 

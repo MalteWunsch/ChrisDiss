@@ -181,9 +181,9 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.setNextQuestion = function () {
         var dice100Result = Math.ceil(Math.random() * 100);
         if (dice100Result <= 50) {
-            this.question = QuestionFactory.getRegularQuestion();
+            this.question = QuestionFactory.getRegularQuestion(true);
         } else {
-            this.question = QuestionFactory.getStroopQuestion();
+            this.question = QuestionFactory.getStroopQuestion(true);
         }
         $scope.currentQuestionNumber += 1;
     };

@@ -1,11 +1,11 @@
 var QuestionFactory = (function () {
     function QuestionFactory() { }
-    QuestionFactory.getStroopQuestion = function getStroopQuestion() {
-        var colours = ColourFactory.getTwoDistinctColours();
+    QuestionFactory.getStroopQuestion = function getStroopQuestion(colourSetForDryRun) {
+        var colours = ColourFactory.getTwoDistinctColours(colourSetForDryRun);
         return new Question(colours[0], colours[1]);
     }
-    QuestionFactory.getRegularQuestion = function () {
-        var colour = ColourFactory.getRandomColour();
+    QuestionFactory.getRegularQuestion = function (colourSetForDryRun) {
+        var colour = ColourFactory.getRandomColour(colourSetForDryRun);
         return new Question(colour, colour);
     };
     return QuestionFactory;
