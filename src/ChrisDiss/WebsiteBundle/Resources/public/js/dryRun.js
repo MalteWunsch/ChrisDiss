@@ -29,6 +29,13 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.millisecondsPerBlackScreen = 3000;
 
     /**
+     * Constant number of milliseconds to delay displaying the tube box after the blood tube has been displayed.
+     *
+     * @type {number}
+     */
+    $scope.millisecondsDelayBeforeTubeBox = 1000;
+
+    /**
      * Constant number of milliseconds a user has for answering a Question before they get a "too slow" message.
      *
      * @type {number}
@@ -143,18 +150,25 @@ function DryRunCtrl($scope, $interval, $timeout) {
     };
 
     /**
-     * Displays a black screen for the configured time  to allow a user to regenerate their concentration.
+     * Displays a black screen for the configured time to allow a user to regenerate their concentration. After the
+     * configured time, display the blood tube Question and with the configured delay the tube box.
      */
     $scope.displayBlackScreen = function () {
-        $('#question, #endOfDryRun, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
+        $('#question, .tube-box, #endOfDryRun, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
         $('#userFocusMarker').show();
 
         $timeout(
             function () {
-                $('#question, #errorDetectionNotice').show();
+                $('#question').show();
                 $('#userFocusMarker').hide();
             },
             $scope.millisecondsPerBlackScreen
+        );
+        $timeout(
+            function () {
+                $('.tube-box, #errorDetectionNotice').show();
+            },
+            $scope.millisecondsPerBlackScreen + $scope.millisecondsDelayBeforeTubeBox
         );
     };
 
@@ -163,7 +177,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
      */
     $scope.manageEndOfDryRun = function() {
         $interval.cancel(manageQuizInterval);
-        $('#question, #errorDetectionNotice').hide();
+        $('#question, .tube-box, #errorDetectionNotice').hide();
         $('#endOfDryRun').show();
     };
 
