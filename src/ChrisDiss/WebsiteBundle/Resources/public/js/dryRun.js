@@ -146,8 +146,16 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * Displays a black screen for the configured time  to allow a user to regenerate their concentration.
      */
     $scope.displayBlackScreen = function () {
-        $('body').hide();
-        $timeout(function () { $('body').show(); }, $scope.millisecondsPerBlackScreen);
+        $('#question, #endOfDryRun, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
+        $('#userFocusMarker').show();
+
+        $timeout(
+            function () {
+                $('#question, #errorDetectionNotice').show();
+                $('#userFocusMarker').hide();
+            },
+            $scope.millisecondsPerBlackScreen
+        );
     };
 
     /**
