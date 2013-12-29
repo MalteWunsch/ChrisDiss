@@ -21,26 +21,41 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.currentQuestionNumber = 1;
 
     /**
-     * Constant number of milliseconds to display the black screen between Questions to allow a user to regenerate their
-     * concentration.
+     * Constant duration in milliseconds to display nothing but a focus mark between Questions to allow a user to
+     * regenerate their concentration. After that, the blood tube is displayed.
      *
      * @type {number}
      */
-    $scope.millisecondsPerBlackScreen = 3000;
+    $scope.durationOfFocusMarkInMilliseconds = 3000;
 
     /**
-     * Constant number of milliseconds to delay displaying the tube box after the blood tube has been displayed.
+     * Constant delay in milliseconds before displaying the tube box after the blood tube.
      *
      * @type {number}
      */
-    $scope.millisecondsDelayBeforeTubeBox = 1000;
+    $scope.delayBeforeTubeBoxInMilliseconds = 1000;
 
     /**
-     * Constant number of milliseconds a user has for answering a Question before they get a "too slow" message.
+     * Constant duration in milliseconds for listening to user input after both the blood tube and the tube box have
+     * been displayed.
      *
      * @type {number}
      */
-    $scope.millisecondsPerQuestion = 3000;
+    $scope.durationOfUserInputListeningInMilliseconds = 3000;
+
+    /**
+     * Constant duration in milliseconds the evaluation of the user's answer is displayed.
+     *
+     * @type {number}
+     */
+    $scope.durationOfAnswerEvaluationInMilliseconds = 3000;
+
+    /**
+     * Whether an answer can be entered now.
+     *
+     * @type {boolean}
+     */
+    $scope.answerCanBeEnteredNow = false;
 
     /**
      * Current Question.
@@ -101,74 +116,127 @@ function DryRunCtrl($scope, $interval, $timeout) {
     };
 
     /**
-     * Hides the passed Question and answer and shows feedback to the user on his answer. There are 5 possible cases:
-     *
+     * Manages a passed question.
+     */
+    $scope.managePassedQuestion = function () {
+        // nothing for now, one could store answers here
+    };
+
+    /**
+     * Get the human readable message of the answer's evaluation.
+     */
+    $scope.getAnswerEvaluationAsText = function () {
+        return $scope.getAnswerEvaluation().getMessage();
+    };
+
+    /**
+     * Get the one of five possible evaluation of the user's answer:
      * 1) user entered no (allowed) key at all
      * 2) user entered correct key and did not enter the "error noticed" key
      * 3) user entered wrong key and did not enter the "error noticed" key
      * 4) user entered wrong key and entered the "error noticed" key
      * 5) user entered correct key but entered the "error noticed" key
+     *
+     * @returns {AnswerEvaluation}
      */
-    $scope.managePassedQuestion = function() {
-        $('#lockedAnswer, #answerMarkedErroneous').hide();
-
-        // 1) user entered no (allowed) key at all
+    $scope.getAnswerEvaluation = function () {
         if (this.lockedKeyCode === null) {
-            alert('Bitte antworten Sie noch etwas schneller.');
-            return;
+            return new NoAnswerEvaluation();
         }
 
         if (this.answerMarkedErroneous === false) {
-            // user entered no correction key
             if ($scope.getLockedAnswerAsBoolean() === this.question.getCorrectAnswer()) {
-                // 2) user entered correct key and did not enter the "error noticed" key
-                alert('Gut: Ihre Antwort war richtig.');
-            } else {
-                // 3) user entered wrong key and did not enter the "error noticed" key
-                alert('Ihre Antwort war leider falsch.');
+                return new CorrectAnswerEvaluation();
             }
-            return;
+            return new WrongAnswerEvaluation();
         }
 
-        // user entered the correction key
         if ($scope.getLockedAnswerAsBoolean() === this.question.getCorrectAnswer()) {
-            // 4) user entered wrong key and entered the "error noticed" key
-            alert('Sie haben Ihre eigentlich richtige Antwort leider als Vertipper markiert.');
-        } else {
-            // 5) user entered correct key but entered the "error noticed" key
-            alert('Gut: Sie haben bemerkt, dass Sie die falsche Antwort gegeben hatten.');
+            return new WronglyMarkedAnswerAsWrongEvaluation();
         }
+        return new CorrectlyMarkedAnswerAsWrongEvaluation();
     };
 
     /**
-     * Manages giving the user another Question.
+     * Manages giving the user another Question. For the time-dependant parts which show and hide DOM elements, this is
+     * timeIndex = 0.
      */
     $scope.manageAnotherQuestion = function() {
-        $scope.displayBlackScreen();
+        $scope.displayFocusMark();
+        $scope.displayQuestion();
+        $scope.displayAnswerEvaluation();
         $scope.removeAnswer();
         $scope.setNextQuestion();
     };
 
     /**
-     * Displays a black screen for the configured time to allow a user to regenerate their concentration. After the
-     * configured time, display the blood tube Question and with the configured delay the tube box.
+     * Starting at timeIndex = 0, the screen is blank. Display a focus mark for durationOfFocusMarkInMilliseconds to
+     * allow users to regenerate their concentration and focus on the area where the next question will show up. After
+     * that, the focus mark is hidden.
      */
-    $scope.displayBlackScreen = function () {
-        $('#question, .tube-box, #endOfDryRun, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
-        $('#userFocusMarker').show();
+    $scope.displayFocusMark = function () {
+        var timeIndex = 0;
+        $timeout(
+            function () {
+                $('#userFocusMarker').show();
+            },
+            timeIndex
+        );
+        $timeout(
+            function () {
+                $('#userFocusMarker').hide();
+            },
+            timeIndex + $scope.durationOfFocusMarkInMilliseconds
+        );
+    };
 
+    /**
+     * Starting at the timeIndex after that focus mark, the screen is blank. Display the question in two parts: the
+     * blood tube at first, and after delayBeforeTubeBoxInMilliseconds the tube box. After displaying the tube box, the
+     * Question as a whole is displayed for durationOfUserInputListeningInMilliseconds and an answer can be entered.
+     * After that, the Question and a possible answer are hidden and answers can no longer be entered.
+     */
+    $scope.displayQuestion = function () {
+        var timeIndex = $scope.durationOfFocusMarkInMilliseconds;
         $timeout(
             function () {
                 $('#question').show();
-                $('#userFocusMarker').hide();
             },
-            $scope.millisecondsPerBlackScreen
+            timeIndex
         );
         $timeout(
             function () {
                 $('.tube-box, #errorDetectionNotice').show();
+                $scope.answerCanBeEnteredNow = true;
             },
-            $scope.millisecondsPerBlackScreen + $scope.millisecondsDelayBeforeTubeBox
+            timeIndex + $scope.delayBeforeTubeBoxInMilliseconds
+        );
+        $timeout(
+            function () {
+                $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
+                $scope.answerCanBeEnteredNow = false;
+            },
+            timeIndex + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds
+        );
+    };
+
+    /**
+     * Starting at the timeIndex after the Question, the screen is blank. Display the evaluation of the user's answer
+     * for durationOfAnswerEvaluationInMilliseconds. After that, the evaluation is hidden.
+     */
+    $scope.displayAnswerEvaluation = function () {
+        var timeIndex = $scope.durationOfFocusMarkInMilliseconds + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds;
+        $timeout(
+            function () {
+                $('#answerEvaluation').show();
+            },
+            timeIndex
+        );
+        $timeout(
+            function () {
+                $('#answerEvaluation').hide();
+            },
+            timeIndex + $scope.durationOfAnswerEvaluationInMilliseconds
         );
     };
 
@@ -177,7 +245,6 @@ function DryRunCtrl($scope, $interval, $timeout) {
      */
     $scope.manageEndOfDryRun = function() {
         $interval.cancel(manageQuizInterval);
-        $('#question, .tube-box, #errorDetectionNotice').hide();
         $('#endOfDryRun').show();
     };
 
@@ -208,19 +275,23 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * @param event the key press event
      */
     $scope.handleUserInput = function (event) {
-        var keyCodeForYes = this.letterForYes.charCodeAt(0),
-            keyCodeForNo = this.letterForNo.charCodeAt(0),
-            keyCodeForMarkingAnswerAsErroneous = this.letterForMarkingAnswerAsErroneous.charCodeAt(0),
+        var keyCodeForYes, keyCodeForNo, keyCodeForMarkingAnswerAsErroneous, pressedKeyCode;
+
+        if ($scope.answerCanBeEnteredNow === true) {
+            keyCodeForYes = this.letterForYes.charCodeAt(0);
+            keyCodeForNo = this.letterForNo.charCodeAt(0);
+            keyCodeForMarkingAnswerAsErroneous = this.letterForMarkingAnswerAsErroneous.charCodeAt(0);
             pressedKeyCode = $scope.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
 
-        if (this.lockedKeyCode === null) {
-            if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
-                this.lockedKeyCode = pressedKeyCode;
-                $('#lockedAnswer').show();
+            if (this.lockedKeyCode === null) {
+                if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
+                    this.lockedKeyCode = pressedKeyCode;
+                    $('#lockedAnswer').show();
+                }
+            } else if (pressedKeyCode === keyCodeForMarkingAnswerAsErroneous) {
+                this.answerMarkedErroneous = true;
+                $('#answerMarkedErroneous').show();
             }
-        } else if (pressedKeyCode === keyCodeForMarkingAnswerAsErroneous) {
-            this.answerMarkedErroneous = true;
-            $('#answerMarkedErroneous').show();
         }
     };
 
@@ -263,10 +334,10 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.manageQuiz();
 
     /**
-     * Call the manageQuiz-function in intervals.
+     * Call the manageQuiz-function in intervals. The interval length consists out of the lengths of it's parts.
      */
     manageQuizInterval = $interval(
         function () { $scope.manageQuiz(); },
-        $scope.millisecondsPerBlackScreen + $scope.millisecondsPerQuestion
+        $scope.durationOfFocusMarkInMilliseconds + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds + $scope.durationOfAnswerEvaluationInMilliseconds
     );
 }

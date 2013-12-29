@@ -43,11 +43,16 @@ div#answerMarkedErroneous {
     left: 120px;
 }
 
-#lockedAnswer, #answerMarkedErroneous {
+#question, #lockedAnswer, .tube-box, #errorDetectionNotice, #answerMarkedErroneous, #answerEvaluation {
     display: none;
 }
 
 #userFocusMarker {
     text-align: center;
     font-size: 150px;
+}
+
+#answerEvaluation {
+    text-align: center;
+    margin-top: 120px;
 }
