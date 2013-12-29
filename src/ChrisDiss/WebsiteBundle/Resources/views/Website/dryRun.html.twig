@@ -12,6 +12,7 @@
 {% block javascripts %}
     {{ parent() }}
     {# TODO: proper import management #}
+    <script src="{{ asset('/bundles/chrisdisswebsite/js/KeyCodeHelper.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/Colour.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/ColourFactory.js') }}"></script>
     <script src="{{ asset('/bundles/chrisdisswebsite/js/Question.js') }}"></script>

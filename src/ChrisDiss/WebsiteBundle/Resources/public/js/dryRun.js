@@ -281,7 +281,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
             keyCodeForYes = this.letterForYes.charCodeAt(0);
             keyCodeForNo = this.letterForNo.charCodeAt(0);
             keyCodeForMarkingAnswerAsErroneous = this.letterForMarkingAnswerAsErroneous.charCodeAt(0);
-            pressedKeyCode = $scope.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
+            pressedKeyCode = KeyCodeHelper.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
 
             if (this.lockedKeyCode === null) {
                 if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
@@ -311,21 +311,6 @@ function DryRunCtrl($scope, $interval, $timeout) {
      */
     $scope.getLockedAnswerAsBoolean = function () {
         return (this.lockedKeyCode === this.letterForYes.charCodeAt(0));
-    };
-
-    /**
-     * If the keyCode corresponds to an upper case ASCII letter, return the corresponding lower case letter's key code.
-     * Otherwise just return the key code.
-     *
-     * @param keyCode number
-     * @returns {number}
-     */
-    $scope.shiftKeyCodeToLowercasedLetterIfApplicable = function (keyCode) {
-        var lowercasedKeyCode = keyCode;
-        if (keyCode >= 65 && keyCode <= 90) {
-            lowercasedKeyCode += 32;
-        }
-        return lowercasedKeyCode;
     };
 
     /**
