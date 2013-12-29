@@ -43,16 +43,27 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.question = null;
 
     /**
+     * Locked ascii code of the uppercased letter of the key the user has pressed. Only allowed strokes on allowed keys
+     * are locked.
+     *
+     * @type {number|null}
+     */
+    $scope.lockedKeyCode = null;
+
+    /**
      * Manage the quiz: display Questions, evaluate user input...
      */
     $scope.manageQuiz = function () {
+        $('#lockedAnswer').hide();
         if ($scope.currentQuestionNumber <= $scope.numberOfQuestions) {
             $scope.displayBlackScreen();
             $scope.setNextQuestion();
+            this.lockedKeyCode = null;
             $scope.currentQuestionNumber += 1;
         } else {
             $interval.cancel(manageQuizInterval);
             $('#question').hide();
+            $('#errorDetectionNotice').hide();
             $('#afterDryRun').show();
         }
     };
@@ -75,6 +86,48 @@ function DryRunCtrl($scope, $interval, $timeout) {
         } else {
             this.question = QuestionFactory.getStroopQuestion();
         }
+    };
+
+    /**
+     * Handle the user input: If the user presses one of the allowed keys, the answer is locked.
+     *
+     * @param event the key press event
+     */
+    $scope.handleUserInput = function (event) {
+        var keyCodeForYes = "y".charCodeAt(0),
+            keyCodeForNo = "n".charCodeAt(0),
+            pressedKeyCode = $scope.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
+
+        if (pressedKeyCode === keyCodeForYes || pressedKeyCode === keyCodeForNo) {
+            if (this.lockedKeyCode === null) {
+                this.lockedKeyCode = pressedKeyCode;
+                $('#lockedAnswer').show();
+            }
+        }
+    };
+
+    /**
+     * Gets the locked answer, i.e. the letter of the pressed key.
+     *
+     * @returns {string}
+     */
+    $scope.getLockedAnswer = function () {
+        return String.fromCharCode(this.lockedKeyCode).toUpperCase();
+    };
+
+    /**
+     * If the keyCode corresponds to an upper case ASCII letter, return the corresponding lower case letter's key code.
+     * Otherwise just return the key code.
+     *
+     * @param keyCode number
+     * @returns {number}
+     */
+    $scope.shiftKeyCodeToLowercasedLetterIfApplicable = function (keyCode) {
+        var lowercasedKeyCode = keyCode;
+        if (keyCode >= 65 && keyCode <= 90) {
+            lowercasedKeyCode += 32;
+        }
+        return lowercasedKeyCode;
     };
 
     /**

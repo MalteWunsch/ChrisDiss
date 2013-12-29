@@ -2,7 +2,7 @@
 
 {% set bodyid = 'dryRun' %}
 {% set ngController = 'DryRunCtrl' %}
-{% set ngKeypress = 'setNextQuestion()' %}
+{% set ngKeypress = 'handleUserInput($event)' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -20,32 +20,40 @@
 {% endblock %}
 
 {% block content %}
-    <div id="question">
-        <div class="blood-tube">
-            <span style="color:#{{ '{{question.getColourHex()}}' }}">{{ '{{question.getColourName()}}' }}</span>
+    <div class="verticalCenterWrapper">
+        <div id="question">
+            <div class="blood-tube">
+                <span style="color:#{{ '{{question.getColourHex()}}' }}">{{ '{{question.getColourName()}}' }}</span>
+            </div>
+            <div class="tube-box">
+                {{ '{{question.getBoxColourName()}}' }}
+            </div>
         </div>
-        <div class="tube-box">
-            {{ '{{question.getBoxColourName()}}' }}
+
+        <div id="afterDryRun">
+            <p>
+                Sie haben den Probelauf beendet und können nun mit der eigentlichen Testung beginnen.
+            </p>
+            <p>
+                Ab jetzt wird Ihnen keine Rückmeldung mehr gegeben, ob Sie richtig oder falsch geantwortet haben.
+            </p>
+            <p>
+                Deshalb denken Sie daran:
+            </p>
+            <ul class="bold">
+                <li>"Y" bei Übereinstimmung von Farbe und Fach, "N" bei Nicht-Übereinstimmung</li>
+                <li>Leertaste drücken, wenn vertippt</li>
+                <li>möglichst schnell antworten</li>
+            </ul>
+            <p>
+                <a href="{{ path('testung') }}">Mit der Testung beginnen</a>
+            </p>
         </div>
     </div>
-
-    <div id="afterDryRun">
-        <p>
-            Sie haben den Probelauf beendet und können nun mit der eigentlichen Testung beginnen.
-        </p>
-        <p>
-            Ab jetzt wird Ihnen keine Rückmeldung mehr gegeben, ob Sie richtig oder falsch geantwortet haben.
-        </p>
-        <p>
-            Deshalb denken Sie daran:
-        </p>
-        <ul class="bold">
-            <li>"Y" bei Übereinstimmung von Farbe und Fach, "N" bei Nicht-Übereinstimmung</li>
-            <li>Leertaste drücken, wenn vertippt</li>
-            <li>möglichst schnell antworten</li>
-        </ul>
-        <p>
-            <a href="{{ path('testung') }}">Mit der Testung beginnen</a>
-        </p>
+    <div id="errorDetectionNotice">
+        Bei Vertippen: Leertaste
+    </div>
+    <div id="lockedAnswer">
+        {{ '{{getLockedAnswer()}}' }}
     </div>
 {% endblock %}
