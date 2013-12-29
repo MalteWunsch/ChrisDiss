@@ -10,7 +10,6 @@ class ColourFactory
         new Colour('rot', 'ff0000'),
         new Colour('grün', '00ff00'),
         new Colour('blau', '0000ff'),
-        new Colour('gelb', 'ffff00'),
         new Colour('pink', 'ff00ff'),
         new Colour('türkis', '00ffff')
     ];
