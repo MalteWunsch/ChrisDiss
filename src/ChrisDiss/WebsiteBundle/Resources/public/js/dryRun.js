@@ -11,7 +11,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
      *
      * @type {number}
      */
-    $scope.numberOfQuestions = 5;
+    $scope.numberOfQuestions = 15;
 
     /**
      * Number of the current question asked.
@@ -26,14 +26,14 @@ function DryRunCtrl($scope, $interval, $timeout) {
      *
      * @type {number}
      */
-    $scope.millisecondsPerBlackScreen = 500;
+    $scope.millisecondsPerBlackScreen = 3000;
 
     /**
      * Constant number of milliseconds a user has for answering a Question before they get a "too slow" message.
      *
      * @type {number}
      */
-    $scope.millisecondsPerQuestion = 2500;
+    $scope.millisecondsPerQuestion = 3000;
 
     /**
      * Current Question.
