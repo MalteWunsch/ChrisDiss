@@ -1,8 +1,9 @@
 var Question = (function () {
     function Question(colourForName, colourForHex) {
+        var headsOrTails;
         this.colourForName = colourForName;
         this.colourForHex = colourForHex;
-        var headsOrTails = Math.floor(Math.random() * 2);
+        headsOrTails = Math.floor(Math.random() * 2);
         this.colourForBox = (headsOrTails === 0) ? colourForHex : colourForName;
     }
     Question.prototype.getColourName = function () {
@@ -14,8 +15,8 @@ var Question = (function () {
     Question.prototype.getBoxColourName = function () {
         return this.colourForBox.getName();
     };
-    Question.prototype.isStroop = function () {
-        return (this.colourForName === this.colourForHex);
+    Question.prototype.getCorrectAnswer = function () {
+        return this.colourForHex === this.colourForBox;
     };
     return Question;
 })();

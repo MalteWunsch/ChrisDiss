@@ -43,6 +43,27 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.question = null;
 
     /**
+     * Constant letter for giving the "Colour on the tube box is correct" answer.
+     *
+     * @type {string}
+     */
+    $scope.letterForYes = "y";
+
+    /**
+     * Constant letter for giving the "Colour on the tube box is not correct" answer.
+     *
+     * @type {string}
+     */
+    $scope.letterForNo = "n";
+
+    /**
+     * Constant letter for marking an answer as erroneous.
+     *
+     * @type {string}
+     */
+    $scope.letterForMarkingAnswerAsErroneous = " ";
+
+    /**
      * Locked ascii code of the uppercased letter of the key the user has pressed. Only allowed strokes on allowed keys
      * are locked.
      *
@@ -59,23 +80,66 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.answerMarkedErroneous = false;
 
     /**
-     * Manage the quiz: display Questions, evaluate user input...
+     * Manage the quiz control flow.
      */
     $scope.manageQuiz = function () {
-        $('#lockedAnswer').hide();
-        $('#answerMarkedErroneous').hide();
-        if ($scope.currentQuestionNumber <= $scope.numberOfQuestions) {
-            $scope.displayBlackScreen();
-            $scope.setNextQuestion();
-            this.lockedKeyCode = null;
-            this.answerMarkedErroneous = false;
-            $scope.currentQuestionNumber += 1;
-        } else {
-            $interval.cancel(manageQuizInterval);
-            $('#question').hide();
-            $('#errorDetectionNotice').hide();
-            $('#afterDryRun').show();
+        if ($scope.currentQuestionNumber > 1) {
+            $scope.managePassedQuestion();
         }
+        if ($scope.currentQuestionNumber <= $scope.numberOfQuestions) {
+            $scope.manageAnotherQuestion();
+        } else {
+            $scope.manageEndOfDryRun();
+        }
+    };
+
+    /**
+     * Hides the passed Question and answer and shows feedback to the user on his answer. There are 5 possible cases:
+     *
+     * 1) user entered no (allowed) key at all
+     * 2) user entered correct key and did not enter the "error noticed" key
+     * 3) user entered wrong key and did not enter the "error noticed" key
+     * 4) user entered wrong key and entered the "error noticed" key
+     * 5) user entered correct key but entered the "error noticed" key
+     */
+    $scope.managePassedQuestion = function() {
+        $('#lockedAnswer, #answerMarkedErroneous').hide();
+
+        // 1) user entered no (allowed) key at all
+        if (this.lockedKeyCode === null) {
+            alert('Bitte antworten Sie noch etwas schneller.');
+            return;
+        }
+
+        if (this.answerMarkedErroneous === false) {
+            // user entered no correction key
+            if ($scope.getLockedAnswerAsBoolean() === this.question.getCorrectAnswer()) {
+                // 2) user entered correct key and did not enter the "error noticed" key
+                alert('Gut: Ihre Antwort war richtig.');
+            } else {
+                // 3) user entered wrong key and did not enter the "error noticed" key
+                alert('Ihre Antwort war leider falsch.');
+            }
+            return;
+        }
+
+        // user entered the correction key
+        if ($scope.getLockedAnswerAsBoolean() === this.question.getCorrectAnswer()) {
+            // 4) user entered wrong key and entered the "error noticed" key
+            alert('Sie haben Ihre eigentlich richtige Antwort leider als Vertipper markiert.');
+        } else {
+            // 5) user entered correct key but entered the "error noticed" key
+            alert('Gut: Sie haben bemerkt, dass Sie die falsche Antwort gegeben hatten.');
+        }
+    };
+
+    /**
+     * Manages giving the user another Question.
+     */
+    $scope.manageAnotherQuestion = function() {
+        $scope.displayBlackScreen();
+        $scope.removeAnswer();
+        $scope.setNextQuestion();
     };
 
     /**
@@ -84,6 +148,23 @@ function DryRunCtrl($scope, $interval, $timeout) {
     $scope.displayBlackScreen = function () {
         $('body').hide();
         $timeout(function () { $('body').show(); }, $scope.millisecondsPerBlackScreen);
+    };
+
+    /**
+     * Manage the end of the dry run after the user has answered all Questions.
+     */
+    $scope.manageEndOfDryRun = function() {
+        $interval.cancel(manageQuizInterval);
+        $('#question, #errorDetectionNotice').hide();
+        $('#endOfDryRun').show();
+    };
+
+    /**
+     * Removes the current answer.
+     */
+    $scope.removeAnswer = function () {
+        this.lockedKeyCode = null;
+        this.answerMarkedErroneous = false;
     };
 
     /**
@@ -96,6 +177,7 @@ function DryRunCtrl($scope, $interval, $timeout) {
         } else {
             this.question = QuestionFactory.getStroopQuestion();
         }
+        $scope.currentQuestionNumber += 1;
     };
 
     /**
@@ -104,9 +186,9 @@ function DryRunCtrl($scope, $interval, $timeout) {
      * @param event the key press event
      */
     $scope.handleUserInput = function (event) {
-        var keyCodeForYes = "y".charCodeAt(0),
-            keyCodeForNo = "n".charCodeAt(0),
-            keyCodeForMarkingAnswerAsErroneous = " ".charCodeAt(0),
+        var keyCodeForYes = this.letterForYes.charCodeAt(0),
+            keyCodeForNo = this.letterForNo.charCodeAt(0),
+            keyCodeForMarkingAnswerAsErroneous = this.letterForMarkingAnswerAsErroneous.charCodeAt(0),
             pressedKeyCode = $scope.shiftKeyCodeToLowercasedLetterIfApplicable(event.which);
 
         if (this.lockedKeyCode === null) {
@@ -127,6 +209,15 @@ function DryRunCtrl($scope, $interval, $timeout) {
      */
     $scope.getLockedAnswer = function () {
         return String.fromCharCode(this.lockedKeyCode).toUpperCase();
+    };
+
+    /**
+     * Returns whether the locked answer is that the Colour on the tube box is correct.
+     *
+     * @returns {boolean}
+     */
+    $scope.getLockedAnswerAsBoolean = function () {
+        return (this.lockedKeyCode === this.letterForYes.charCodeAt(0));
     };
 
     /**

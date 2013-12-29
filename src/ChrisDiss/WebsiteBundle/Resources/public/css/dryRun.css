@@ -3,7 +3,7 @@ html {
     color: #ffffff;
 }
 
-div#afterDryRun {
+div#endOfDryRun {
     display:none;
     width: 650px;
     margin:auto;
@@ -41,4 +41,8 @@ div.key {
 
 div#answerMarkedErroneous {
     left: 120px;
+}
+
+#lockedAnswer, #answerMarkedErroneous {
+    display: none;
 }

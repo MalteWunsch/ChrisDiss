@@ -26,10 +26,12 @@ class Question {
      * @param colourForHex Colour that is used for displaying the Colour hex code.
      */
     constructor(colourForName: Colour, colourForHex: Colour) {
+        var headsOrTails;
+
         this.colourForName = colourForName;
         this.colourForHex = colourForHex;
 
-        var headsOrTails = Math.floor(Math.random() * 2);
+        headsOrTails = Math.floor(Math.random() * 2);
         this.colourForBox = (headsOrTails === 0) ? colourForHex : colourForName;
     }
 
@@ -55,13 +57,12 @@ class Question {
     }
 
     /**
-     * Returns whether this Question is a Stroop one (having different Colours for the name and the hex code) or a
-     * regular one.
-     * Caution: This distinction is based on Colour identity, not equality.
+     * Gets the correct answer for this question, i.e. whether the Colour for the hex code is the same (caution: in
+     * terms of identity, not equality) as the one used for the tube box.
      *
      * @returns {bool}
      */
-    public isStroop() {
-        return (this.colourForName === this.colourForHex);
+    public getCorrectAnswer() {
+        return this.colourForHex === this.colourForBox;
     }
 }
