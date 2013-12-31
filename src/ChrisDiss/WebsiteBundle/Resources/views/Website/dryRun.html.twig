@@ -6,20 +6,21 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('/bundles/chrisdisswebsite/css/dryRun.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/chrisdisswebsite/css/dryRun-and-test.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/chrisdisswebsite/css/dryRun.css') }}" rel="stylesheet" />
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     {# TODO: proper import management #}
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/KeyCodeHelper.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/Colour.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/ColourFactory.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/Question.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/QuestionFactory.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/Answer.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/AnswerEvaluations.js') }}"></script>
-    <script src="{{ asset('/bundles/chrisdisswebsite/js/dryRun.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/KeyCodeHelper.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/Colour.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/ColourFactory.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/Question.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/QuestionFactory.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/Answer.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/AnswerEvaluations.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/dryRun.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +33,7 @@
         </div>
         <div id="question">
             <div class="blood-tube">
-                <span style="color:#{{ '{{question.getColourHex()}}' }}">{{ '{{question.getColourName()}}' }}</span>
+                <span style="color:#{{ '{{question.getColourHex()}}' }};">{{ '{{question.getColourName()}}' }}</span>
             </div>
             <div class="tube-box">
                 {{ '{{question.getBoxColourName()}}' }}
