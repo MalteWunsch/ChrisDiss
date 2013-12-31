@@ -1,3 +1,8 @@
+html {
+    background-color: #000000;
+    color: #ffffff;
+}
+
 div.blood-tube, div.tube-box {
     margin-left: auto;
     margin-right: auto;
