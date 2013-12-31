@@ -7,223 +7,20 @@ function DryRunCtrl($scope, $interval, $timeout) {
     var manageQuizInterval;
 
     /**
-     * Constant number of questions to ask.
+     * Base controller with extracted commonalities between the dryRun- and test-Controller,
      *
-     * @type {number}
+     * @type {BaseController}
      */
-    $scope.numberOfQuestions = 15;
-
-    /**
-     * Number of the current question asked.
-     *
-     * @type {number}
-     */
-    $scope.currentQuestionNumber = 1;
-
-    /**
-     * Constant duration in milliseconds to display nothing but a focus mark between Questions to allow a user to
-     * regenerate their concentration. After that, the blood tube is displayed.
-     *
-     * @type {number}
-     */
-    $scope.durationOfFocusMarkInMilliseconds = 3000;
-
-    /**
-     * Constant delay in milliseconds before displaying the tube box after the blood tube.
-     *
-     * @type {number}
-     */
-    $scope.delayBeforeTubeBoxInMilliseconds = 1000;
-
-    /**
-     * Constant duration in milliseconds for listening to user input after both the blood tube and the tube box have
-     * been displayed.
-     *
-     * @type {number}
-     */
-    $scope.durationOfUserInputListeningInMilliseconds = 3000;
-
-    /**
-     * Constant duration in milliseconds the evaluation of the user's answer is displayed.
-     *
-     * @type {number}
-     */
-    $scope.durationOfAnswerEvaluationInMilliseconds = 3000;
-
-    /**
-     * Current Question.
-     *
-     * @type {Question|null}
-     */
-    $scope.question = null;
-
-    /**
-     * Locked answer to the current question.
-     *
-     * @type {Answer|null}
-     */
-    $scope.answer = null;
+    $scope.baseController = new BaseController(15, 3000, 1000, 3000, 3000);
 
     /**
      * Manage the quiz control flow.
      */
     $scope.manageQuiz = function () {
-        if ($scope.currentQuestionNumber > 1) {
-            $scope.managePassedQuestion();
-        }
-        if ($scope.currentQuestionNumber <= $scope.numberOfQuestions) {
-            $scope.manageAnotherQuestion();
+        if ($scope.baseController.currentQuestionNumber <= $scope.baseController.numberOfQuestions) {
+            $scope.baseController.manageAnotherQuestion($timeout);
         } else {
-            $scope.manageEndOfDryRun();
-        }
-    };
-
-    /**
-     * Manages a passed question.
-     */
-    $scope.managePassedQuestion = function () {
-        // nothing for now, one could store answers here
-    };
-
-    /**
-     * Get the one of five possible evaluation of the user's answer:
-     * 1) user entered no (allowed) key at all
-     * 2) user entered correct key and did not enter the "error noticed" key
-     * 3) user entered wrong key and did not enter the "error noticed" key
-     * 4) user entered wrong key and entered the "error noticed" key
-     * 5) user entered correct key but entered the "error noticed" key
-     *
-     * @returns {string}
-     */
-    $scope.getAnswerEvaluationAsText = function () {
-        return Answer.getEvaluation(this.answer, this.question)
-                     .getMessage();
-    };
-
-    /**
-     * Manages giving the user another Question. For the time-dependant parts which show and hide DOM elements, this is
-     * timeIndex = 0.
-     */
-    $scope.manageAnotherQuestion = function () {
-        $scope.displayFocusMark();
-        $scope.displayQuestion();
-        $scope.displayAnswerEvaluation();
-        $scope.setNextQuestion();
-    };
-
-    /**
-     * Starting at timeIndex = 0, the screen is blank. Display a focus mark for durationOfFocusMarkInMilliseconds to
-     * allow users to regenerate their concentration and focus on the area where the next question will show up. After
-     * that, the focus mark is hidden.
-     */
-    $scope.displayFocusMark = function () {
-        var timeIndex = 0;
-        $timeout(
-            function () {
-                $('#userFocusMarker').show();
-            },
-            timeIndex
-        );
-        $timeout(
-            function () {
-                $('#userFocusMarker').hide();
-            },
-            timeIndex + $scope.durationOfFocusMarkInMilliseconds
-        );
-    };
-
-    /**
-     * Starting at the timeIndex after that focus mark, the screen is blank. Display the question in two parts: the
-     * blood tube at first, and after delayBeforeTubeBoxInMilliseconds the tube box. After displaying the tube box, the
-     * Question as a whole is displayed for durationOfUserInputListeningInMilliseconds and an answer can be entered.
-     * After that, the Question and a possible answer are hidden and answers can no longer be entered.
-     */
-    $scope.displayQuestion = function () {
-        var timeIndex = $scope.durationOfFocusMarkInMilliseconds;
-        $timeout(
-            function () {
-                $('#question').show();
-            },
-            timeIndex
-        );
-        $timeout(
-            function () {
-                $('.tube-box, #errorDetectionNotice').show();
-                Answer.setCanBeEnteredNow(true);
-            },
-            timeIndex + $scope.delayBeforeTubeBoxInMilliseconds
-        );
-        $timeout(
-            function () {
-                $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
-                Answer.setCanBeEnteredNow(false);
-            },
-            timeIndex + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds
-        );
-    };
-
-    /**
-     * Starting at the timeIndex after the Question, the screen is blank. Display the evaluation of the user's answer
-     * for durationOfAnswerEvaluationInMilliseconds. After that, the evaluation is hidden.
-     */
-    $scope.displayAnswerEvaluation = function () {
-        var timeIndex = $scope.durationOfFocusMarkInMilliseconds + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds;
-        $timeout(
-            function () {
-                $('#answerEvaluation').show();
-            },
-            timeIndex
-        );
-        $timeout(
-            function () {
-                $('#answerEvaluation').hide();
-            },
-            timeIndex + $scope.durationOfAnswerEvaluationInMilliseconds
-        );
-    };
-
-    /**
-     * Manage the end of the dry run after the user has answered all Questions.
-     */
-    $scope.manageEndOfDryRun = function () {
-        $interval.cancel(manageQuizInterval);
-        $('#endOfDryRun').show();
-    };
-
-    /**
-     * Sets a new Question, with it randomly being a Stroop or a regular one.
-     */
-    $scope.setNextQuestion = function () {
-        var dice100Result = Math.ceil(Math.random() * 100);
-        if (dice100Result <= 50) {
-            this.question = QuestionFactory.getRegularQuestion(true);
-        } else {
-            this.question = QuestionFactory.getStroopQuestion(true);
-        }
-        $scope.currentQuestionNumber += 1;
-        this.answer = null;
-    };
-
-    /**
-     * Handle the user input: If the user presses one of the allowed keys, the answer is locked.
-     *
-     * @param event the key press event
-     */
-    $scope.handleUserInput = function (event) {
-        var lowerCaseChar = String.fromCharCode(
-            KeyCodeHelper.shiftKeyCodeToLowerCasedLetterIfApplicable(event.which)
-        );
-
-        if (Answer.getCanBeEnteredNow() === true) {
-            if (this.answer === null) {
-                if (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo()) {
-                    this.answer = new Answer(lowerCaseChar);
-                    $('#lockedAnswer').show();
-                }
-            } else if (lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
-                this.answer.markAsErroneous();
-                $('#answerMarkedErroneous').show();
-            }
+            $scope.baseController.manageEndOfQuestions($interval, manageQuizInterval);
         }
     };
 
@@ -237,6 +34,6 @@ function DryRunCtrl($scope, $interval, $timeout) {
      */
     manageQuizInterval = $interval(
         function () { $scope.manageQuiz(); },
-        $scope.durationOfFocusMarkInMilliseconds + $scope.delayBeforeTubeBoxInMilliseconds + $scope.durationOfUserInputListeningInMilliseconds + $scope.durationOfAnswerEvaluationInMilliseconds
+        $scope.baseController.durationOfFocusMarkInMilliseconds + $scope.baseController.delayBeforeTubeBoxInMilliseconds + $scope.baseController.durationOfUserInputListeningInMilliseconds + $scope.baseController.durationOfAnswerEvaluationInMilliseconds
     );
 }
