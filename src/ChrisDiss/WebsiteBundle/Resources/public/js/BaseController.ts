@@ -130,13 +130,18 @@ class BaseController {
     }
 
     /**
-     * Manages giving the user another Question. For the time-dependant parts which show and hide DOM elements, this is
-     * timeIndex = 0.
+     * Manages giving the user another Question. For the time-dependant parts which show and hide DOM elements.
      */
     public manageAnotherQuestion($timeout) {
-        this.displayFocusMark($timeout);
-        this.displayQuestion($timeout);
-        this.displayAnswerEvaluation($timeout);
+        var timeIndex = 0;
+        this.displayFocusMark($timeout, timeIndex);
+
+        timeIndex += this.durationOfFocusMarkInMilliseconds;
+        this.displayQuestion($timeout, timeIndex);
+
+        timeIndex += this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds;
+        this.displayAnswerEvaluation($timeout, timeIndex);
+
         this.setNextQuestion();
     }
 
@@ -144,9 +149,10 @@ class BaseController {
      * Starting at timeIndex = 0, the screen is blank. Display a focus mark for durationOfFocusMarkInMilliseconds to
      * allow users to regenerate their concentration and focus on the area where the next question will show up. After
      * that, the focus mark is hidden.
+     *
+     * @param timeIndex when to start displaying
      */
-    public displayFocusMark($timeout) {
-        var timeIndex = 0;
+    public displayFocusMark($timeout, timeIndex: number) {
         $timeout(
             function () {
                 $('#userFocusMarker').show();
@@ -166,9 +172,10 @@ class BaseController {
      * blood tube at first, and after delayBeforeTubeBoxInMilliseconds the tube box. After displaying the tube box, the
      * Question as a whole is displayed for durationOfUserInputListeningInMilliseconds and an answer can be entered.
      * After that, the Question and a possible answer are hidden and answers can no longer be entered.
+     *
+     * @param timeIndex when to start displaying
      */
-    public displayQuestion($timeout) {
-        var timeIndex = this.durationOfFocusMarkInMilliseconds;
+    public displayQuestion($timeout, timeIndex: number) {
         $timeout(
             function () {
                 $('#question').show();
@@ -194,9 +201,10 @@ class BaseController {
     /**
      * Starting at the timeIndex after the Question, the screen is blank. Display the evaluation of the user's answer
      * for durationOfAnswerEvaluationInMilliseconds. After that, the evaluation is hidden.
+     *
+     * @param timeIndex when to start displaying
      */
-    public displayAnswerEvaluation($timeout) {
-        var timeIndex = this.durationOfFocusMarkInMilliseconds + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds;
+    public displayAnswerEvaluation($timeout, timeIndex: number) {
         $timeout(
             function () {
                 $('#answerEvaluation').show();

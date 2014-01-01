@@ -13,13 +13,15 @@ var BaseController = (function () {
         return Answer.getEvaluation(this.answer, this.question);
     };
     BaseController.prototype.manageAnotherQuestion = function ($timeout) {
-        this.displayFocusMark($timeout);
-        this.displayQuestion($timeout);
-        this.displayAnswerEvaluation($timeout);
+        var timeIndex = 0;
+        this.displayFocusMark($timeout, timeIndex);
+        timeIndex += this.durationOfFocusMarkInMilliseconds;
+        this.displayQuestion($timeout, timeIndex);
+        timeIndex += this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds;
+        this.displayAnswerEvaluation($timeout, timeIndex);
         this.setNextQuestion();
     };
-    BaseController.prototype.displayFocusMark = function ($timeout) {
-        var timeIndex = 0;
+    BaseController.prototype.displayFocusMark = function ($timeout, timeIndex) {
         $timeout(function () {
             $('#userFocusMarker').show();
         }, timeIndex);
@@ -27,8 +29,7 @@ var BaseController = (function () {
             $('#userFocusMarker').hide();
         }, timeIndex + this.durationOfFocusMarkInMilliseconds);
     };
-    BaseController.prototype.displayQuestion = function ($timeout) {
-        var timeIndex = this.durationOfFocusMarkInMilliseconds;
+    BaseController.prototype.displayQuestion = function ($timeout, timeIndex) {
         $timeout(function () {
             $('#question').show();
         }, timeIndex);
@@ -41,8 +42,7 @@ var BaseController = (function () {
             Answer.setCanBeEnteredNow(false);
         }, timeIndex + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds);
     };
-    BaseController.prototype.displayAnswerEvaluation = function ($timeout) {
-        var timeIndex = this.durationOfFocusMarkInMilliseconds + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds;
+    BaseController.prototype.displayAnswerEvaluation = function ($timeout, timeIndex) {
         $timeout(function () {
             $('#answerEvaluation').show();
         }, timeIndex);
