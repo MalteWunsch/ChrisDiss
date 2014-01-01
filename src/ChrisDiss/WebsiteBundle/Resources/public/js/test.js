@@ -1,10 +1,15 @@
 /**
  * AngularJS-controller for the real test.
  */
-function TestCtrl($scope, $interval, $timeout) {
+function TestCtrl($scope, $timeout) {
     'use strict';
 
-    var manageQuizInIntervals;
+    /**
+     * Number of Questions the user has been too slow to answer after which they will be given a "too slow" notice.
+     *
+     * @type {number}
+     */
+    $scope.numberOfNoAnswersBeforeNotice = 3;
 
     /**
      * Number of wrong answers (marked and unmarked) after which the real test run terminates.
@@ -18,7 +23,7 @@ function TestCtrl($scope, $interval, $timeout) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(100, 3000, 1000, 3000, 0, 80, false);
+    $scope.baseController = new BaseController(100, 3000, 1000, 3000, 3000, 80, false);
 
     /**
      * Aggregation of the AnswerEvaluations.
@@ -31,14 +36,39 @@ function TestCtrl($scope, $interval, $timeout) {
      * Manage the quiz control flow.
      */
     $scope.manageQuiz = function () {
-        if ($scope.baseController.currentQuestionNumber > 1) {
-            $scope.testResult.add($scope.baseController.getAnswerEvaluation());
-        }
+        var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation();
+
         if ($scope.quizShouldEnd() === true) {
-            $scope.baseController.manageEndOfQuestions($interval, manageQuizInIntervals);
+            $scope.baseController.manageEndOfQuestions();
         } else {
-            $scope.baseController.manageAnotherQuestion($timeout);
+            $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope);
         }
+    };
+
+    /**
+     * Manage the evaluation of the user's answer: For the real test run, store the evaluation in the test result and
+     * display the "too slow" message if the user has been too slow several times.
+     *
+     * @returns {number} delay for displaying the answer evaluation in milliseconds.
+     */
+    $scope.manageAnswerEvaluation = function () {
+        var delayForDisplayingEvaluation = 0,
+            answerEvaluation;
+
+        if ($scope.baseController.currentQuestionNumber === 1) {
+            return delayForDisplayingEvaluation;
+        }
+
+        answerEvaluation = $scope.baseController.getAnswerEvaluation();
+        $scope.testResult.add(answerEvaluation);
+
+        // letzte answer no answer und y no answers schon da
+        if (answerEvaluation instanceof NoAnswerEvaluation && this.testResult.getNumberOfNoAnswers() > this.numberOfNoAnswersBeforeNotice) {
+            $scope.baseController.displayAnswerEvaluation($timeout, 0);
+            delayForDisplayingEvaluation += $scope.baseController.durationOfAnswerEvaluationInMilliseconds;
+        }
+
+        return delayForDisplayingEvaluation;
     };
 
     /**
@@ -53,5 +83,5 @@ function TestCtrl($scope, $interval, $timeout) {
         return allQuestionsAsked || enoughWrongAnswersGiven;
     };
 
-    manageQuizInIntervals = $scope.baseController.manageQuizInIntervals($interval, $scope.manageQuiz);
+    $scope.manageQuiz();
 }

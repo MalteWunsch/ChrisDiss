@@ -10,73 +10,53 @@
 class BaseController {
     /**
      * Constant number of questions to ask.
-     *
-     * @type {number}
      */
     public numberOfQuestions: number;
 
     /**
      * Number of the current question asked.
-     *
-     * @type {number}
      */
     public currentQuestionNumber: number;
 
     /**
      * Constant duration in milliseconds to display nothing but a focus mark between Questions to allow a user to
      * regenerate their concentration. After that, the blood tube is displayed.
-     *
-     * @type {number}
      */
     public durationOfFocusMarkInMilliseconds: number;
 
     /**
      * Constant delay in milliseconds before displaying the tube box after the blood tube.
-     *
-     * @type {number}
      */
     public delayBeforeTubeBoxInMilliseconds: number;
 
     /**
      * Constant duration in milliseconds for listening to user input after both the blood tube and the tube box have
      * been displayed.
-     *
-     * @type {number}
      */
     public durationOfUserInputListeningInMilliseconds: number;
 
     /**
      * Constant duration in milliseconds the evaluation of the user's answer is displayed.
-     *
-     * @type {number}
      */
     public durationOfAnswerEvaluationInMilliseconds: number;
 
     /**
      * Constant percentage of chance that a Question is a Stroop one.
-     *
-     * @type {number}
      */
     public percentageOfStroopQuestions: number;
 
     /**
      * Current Question.
-     *
-     * @type {Question|null}
      */
     public question: Question;
 
     /**
      * Locked answer to the current question.
-     *
-     * @type {Answer|null}
      */
     public answer: Answer;
 
     /**
      * Whether the reduced colour set for the test run should be used (true) or the full colour set (false).
-     *
-     * @type {boolean}
      */
     public decreasedColourSet: boolean;
 
@@ -116,41 +96,34 @@ class BaseController {
     }
 
     /**
-     * Get the one of five possible evaluation of the user's answer:
-     * 1) user entered no (allowed) key at all
-     * 2) user entered correct key and did not enter the "error noticed" key
-     * 3) user entered wrong key and did not enter the "error noticed" key
-     * 4) user entered wrong key and entered the "error noticed" key
-     * 5) user entered correct key but entered the "error noticed" key
+     * Manages giving the user the next Question.
      *
-     * @returns {AnswerEvaluation}
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
+     * @param $scope AngularJS $scope.
      */
-    public getAnswerEvaluation() {
-        return Answer.getEvaluation(this.answer, this.question);
-    }
-
-    /**
-     * Manages giving the user another Question. For the time-dependant parts which show and hide DOM elements.
-     */
-    public manageAnotherQuestion($timeout) {
-        var timeIndex = 0;
+    public manageNextQuestion($timeout, timeIndex: number, $scope) {
         this.displayFocusMark($timeout, timeIndex);
 
         timeIndex += this.durationOfFocusMarkInMilliseconds;
-        this.displayQuestion($timeout, timeIndex);
+        this.setNextQuestion($timeout, timeIndex, $scope);
+        this.displayBloodTube($timeout, timeIndex);
 
-        timeIndex += this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds;
-        this.displayAnswerEvaluation($timeout, timeIndex);
+        timeIndex += this.delayBeforeTubeBoxInMilliseconds;
+        this.allowUserInput($timeout, timeIndex);
+        this.displayTubeBox($timeout, timeIndex);
 
-        this.setNextQuestion();
+        timeIndex += this.durationOfUserInputListeningInMilliseconds;
+        this.setNextManagement($timeout, timeIndex, $scope);
     }
 
     /**
-     * Starting at timeIndex = 0, the screen is blank. Display a focus mark for durationOfFocusMarkInMilliseconds to
+     * Starting at some timeIndex, the screen is blank. Display a focus mark for durationOfFocusMarkInMilliseconds to
      * allow users to regenerate their concentration and focus on the area where the next question will show up. After
      * that, the focus mark is hidden.
      *
-     * @param timeIndex when to start displaying
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
      */
     public displayFocusMark($timeout, timeIndex: number) {
         $timeout(
@@ -168,14 +141,38 @@ class BaseController {
     }
 
     /**
-     * Starting at the timeIndex after that focus mark, the screen is blank. Display the question in two parts: the
-     * blood tube at first, and after delayBeforeTubeBoxInMilliseconds the tube box. After displaying the tube box, the
-     * Question as a whole is displayed for durationOfUserInputListeningInMilliseconds and an answer can be entered.
-     * After that, the Question and a possible answer are hidden and answers can no longer be entered.
+     * Starting at the timeIndex after the focus mark, set a new Question, with it randomly being a Stroop or a regular
+     * one. That deletes the former answer.
      *
-     * @param timeIndex when to start displaying
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
+     * @param $scope AngularJS $scope.
      */
-    public displayQuestion($timeout, timeIndex: number) {
+    public setNextQuestion($timeout, timeIndex: number, $scope) {
+        $timeout(
+            function () {
+                var dice100Result = Math.ceil(Math.random() * 100);
+                if (dice100Result >= $scope.baseController.percentageOfStroopQuestions) {
+                    $scope.baseController.question = QuestionFactory.getRegularQuestion(this.decreasedColourSet);
+                } else {
+                    $scope.baseController.question = QuestionFactory.getStroopQuestion(this.decreasedColourSet);
+                }
+                $scope.baseController.currentQuestionNumber += 1;
+                $scope.baseController.answer = null;
+            },
+            timeIndex
+        );
+    }
+
+    /**
+     * Starting at the timeIndex after the focus mark, the screen is blank. Display the blood tube as one part of the
+     * Question for delayBeforeTubeBoxInMilliseconds + durationOfUserInputListeningInMilliseconds. After that, the blood
+     * tube is hidden.
+     *
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
+     */
+    public displayBloodTube($timeout, timeIndex: number) {
         $timeout(
             function () {
                 $('#question').show();
@@ -184,25 +181,95 @@ class BaseController {
         );
         $timeout(
             function () {
-                $('.tube-box, #errorDetectionNotice').show();
-                Answer.setCanBeEnteredNow(true);
-            },
-            timeIndex + this.delayBeforeTubeBoxInMilliseconds
-        );
-        $timeout(
-            function () {
-                $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
-                Answer.setCanBeEnteredNow(false);
+                $('#question').hide();
             },
             timeIndex + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds
         );
     }
 
     /**
+     * Starting at the timeIndex after the blood tube + delayBeforeTubeBoxInMilliseconds, allow user input for answering
+     * the Question for durationOfUserInputListeningInMilliseconds. After that, user input is disabled.
+     *
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
+     */
+    public allowUserInput($timeout, timeIndex: number) {
+        $timeout(
+            function () {
+                Answer.setCanBeEnteredNow(true);
+            },
+            timeIndex
+        );
+        $timeout(
+            function () {
+                Answer.setCanBeEnteredNow(false);
+            },
+            timeIndex + this.durationOfUserInputListeningInMilliseconds
+        );
+    }
+
+    /**
+     * Starting at the timeIndex after the blood tube + delayBeforeTubeBoxInMilliseconds, the screen show the blood
+     * tube. Display the tube box (and error detection notice) as the second and final part of the Question for
+     * delayBeforeTubeBoxInMilliseconds + durationOfUserInputListeningInMilliseconds. After that, the tube box, error
+     * detection notice and a possible answer are hidden.
+     *
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
+     */
+    public displayTubeBox($timeout, timeIndex: number) {
+        $timeout(
+            function () {
+                $('.tube-box, #errorDetectionNotice').show();
+            },
+            timeIndex
+        );
+        $timeout(
+            function () {
+                $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
+            },
+            timeIndex + this.durationOfUserInputListeningInMilliseconds
+        );
+    }
+
+    /**
+     * Starting at the timeIndex after the user input, call the manager function for the Question currently displayed
+     * and the Answer possibly given.
+     *
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
+     * @param $scope AngularJS $scope.
+     */
+    public setNextManagement($timeout, timeIndex: number, $scope) {
+        $timeout(
+            function () {
+                $scope.manageQuiz();
+            },
+            timeIndex
+        );
+    }
+
+    /**
+     * Get the one of five possible evaluation of the user's answer:
+     * 1) user entered no (allowed) key at all
+     * 2) user entered correct key and did not enter the "error noticed" key
+     * 3) user entered wrong key and did not enter the "error noticed" key
+     * 4) user entered wrong key and entered the "error noticed" key
+     * 5) user entered correct key but entered the "error noticed" key
+     *
+     * @returns {AnswerEvaluation}
+     */
+    public getAnswerEvaluation() {
+        return Answer.getEvaluation(this.answer, this.question);
+    }
+
+    /**
      * Starting at the timeIndex after the Question, the screen is blank. Display the evaluation of the user's answer
      * for durationOfAnswerEvaluationInMilliseconds. After that, the evaluation is hidden.
      *
-     * @param timeIndex when to start displaying
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
      */
     public displayAnswerEvaluation($timeout, timeIndex: number) {
         $timeout(
@@ -220,24 +287,9 @@ class BaseController {
     }
 
     /**
-     * Sets a new Question, with it randomly being a Stroop or a regular one.
-     */
-    public setNextQuestion() {
-        var dice100Result = Math.ceil(Math.random() * 100);
-        if (dice100Result >= this.percentageOfStroopQuestions) {
-            this.question = QuestionFactory.getRegularQuestion(this.decreasedColourSet);
-        } else {
-            this.question = QuestionFactory.getStroopQuestion(this.decreasedColourSet);
-        }
-        this.currentQuestionNumber += 1;
-        this.answer = null;
-    }
-
-    /**
      * Manage the end after the user has answered all Questions.
      */
-    public manageEndOfQuestions($interval, manageQuizInterval) {
-        $interval.cancel(manageQuizInterval);
+    public manageEndOfQuestions() {
         $('#endOfQuestions').show();
     }
 
@@ -262,21 +314,5 @@ class BaseController {
                 $('#answerMarkedErroneous').show();
             }
         }
-    }
-
-    /**
-     * Kick start the manageQuiz function and call it in intervals. The interval length consists out of the lengths of
-     * it's parts.
-     *
-     * @param $interval
-     * @param manageQuiz
-     * @returns {*}
-     */
-    public manageQuizInIntervals($interval, manageQuiz) {
-        manageQuiz();
-        return $interval(
-            function () { manageQuiz(); },
-            this.durationOfFocusMarkInMilliseconds + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds + this.durationOfAnswerEvaluationInMilliseconds
-        );
     }
 }

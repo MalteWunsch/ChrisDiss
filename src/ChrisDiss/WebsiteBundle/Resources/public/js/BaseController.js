@@ -9,17 +9,16 @@ var BaseController = (function () {
         this.percentageOfStroopQuestions = percentageOfStroopQuestions;
         this.decreasedColourSet = decreasedColourSet;
     }
-    BaseController.prototype.getAnswerEvaluation = function () {
-        return Answer.getEvaluation(this.answer, this.question);
-    };
-    BaseController.prototype.manageAnotherQuestion = function ($timeout) {
-        var timeIndex = 0;
+    BaseController.prototype.manageNextQuestion = function ($timeout, timeIndex, $scope) {
         this.displayFocusMark($timeout, timeIndex);
         timeIndex += this.durationOfFocusMarkInMilliseconds;
-        this.displayQuestion($timeout, timeIndex);
-        timeIndex += this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds;
-        this.displayAnswerEvaluation($timeout, timeIndex);
-        this.setNextQuestion();
+        this.setNextQuestion($timeout, timeIndex, $scope);
+        this.displayBloodTube($timeout, timeIndex);
+        timeIndex += this.delayBeforeTubeBoxInMilliseconds;
+        this.allowUserInput($timeout, timeIndex);
+        this.displayTubeBox($timeout, timeIndex);
+        timeIndex += this.durationOfUserInputListeningInMilliseconds;
+        this.setNextManagement($timeout, timeIndex, $scope);
     };
     BaseController.prototype.displayFocusMark = function ($timeout, timeIndex) {
         $timeout(function () {
@@ -29,18 +28,49 @@ var BaseController = (function () {
             $('#userFocusMarker').hide();
         }, timeIndex + this.durationOfFocusMarkInMilliseconds);
     };
-    BaseController.prototype.displayQuestion = function ($timeout, timeIndex) {
+    BaseController.prototype.setNextQuestion = function ($timeout, timeIndex, $scope) {
+        $timeout(function () {
+            var dice100Result = Math.ceil(Math.random() * 100);
+            if(dice100Result >= $scope.baseController.percentageOfStroopQuestions) {
+                $scope.baseController.question = QuestionFactory.getRegularQuestion(this.decreasedColourSet);
+            } else {
+                $scope.baseController.question = QuestionFactory.getStroopQuestion(this.decreasedColourSet);
+            }
+            $scope.baseController.currentQuestionNumber += 1;
+            $scope.baseController.answer = null;
+        }, timeIndex);
+    };
+    BaseController.prototype.displayBloodTube = function ($timeout, timeIndex) {
         $timeout(function () {
             $('#question').show();
         }, timeIndex);
         $timeout(function () {
-            $('.tube-box, #errorDetectionNotice').show();
+            $('#question').hide();
+        }, timeIndex + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds);
+    };
+    BaseController.prototype.allowUserInput = function ($timeout, timeIndex) {
+        $timeout(function () {
             Answer.setCanBeEnteredNow(true);
-        }, timeIndex + this.delayBeforeTubeBoxInMilliseconds);
+        }, timeIndex);
+        $timeout(function () {
+            Answer.setCanBeEnteredNow(false);
+        }, timeIndex + this.durationOfUserInputListeningInMilliseconds);
+    };
+    BaseController.prototype.displayTubeBox = function ($timeout, timeIndex) {
+        $timeout(function () {
+            $('.tube-box, #errorDetectionNotice').show();
+        }, timeIndex);
         $timeout(function () {
             $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
-            Answer.setCanBeEnteredNow(false);
-        }, timeIndex + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds);
+        }, timeIndex + this.durationOfUserInputListeningInMilliseconds);
+    };
+    BaseController.prototype.setNextManagement = function ($timeout, timeIndex, $scope) {
+        $timeout(function () {
+            $scope.manageQuiz();
+        }, timeIndex);
+    };
+    BaseController.prototype.getAnswerEvaluation = function () {
+        return Answer.getEvaluation(this.answer, this.question);
     };
     BaseController.prototype.displayAnswerEvaluation = function ($timeout, timeIndex) {
         $timeout(function () {
@@ -50,18 +80,7 @@ var BaseController = (function () {
             $('#answerEvaluation').hide();
         }, timeIndex + this.durationOfAnswerEvaluationInMilliseconds);
     };
-    BaseController.prototype.setNextQuestion = function () {
-        var dice100Result = Math.ceil(Math.random() * 100);
-        if(dice100Result >= this.percentageOfStroopQuestions) {
-            this.question = QuestionFactory.getRegularQuestion(this.decreasedColourSet);
-        } else {
-            this.question = QuestionFactory.getStroopQuestion(this.decreasedColourSet);
-        }
-        this.currentQuestionNumber += 1;
-        this.answer = null;
-    };
-    BaseController.prototype.manageEndOfQuestions = function ($interval, manageQuizInterval) {
-        $interval.cancel(manageQuizInterval);
+    BaseController.prototype.manageEndOfQuestions = function () {
         $('#endOfQuestions').show();
     };
     BaseController.prototype.handleUserInput = function (event) {
@@ -79,12 +98,6 @@ var BaseController = (function () {
                 }
             }
         }
-    };
-    BaseController.prototype.manageQuizInIntervals = function ($interval, manageQuiz) {
-        manageQuiz();
-        return $interval(function () {
-            manageQuiz();
-        }, this.durationOfFocusMarkInMilliseconds + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds + this.durationOfAnswerEvaluationInMilliseconds);
     };
     return BaseController;
 })();
