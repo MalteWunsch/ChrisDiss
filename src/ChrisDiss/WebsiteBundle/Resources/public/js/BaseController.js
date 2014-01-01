@@ -78,6 +78,12 @@ var BaseController = (function () {
             }
         }
     };
+    BaseController.prototype.manageQuizInIntervals = function ($interval, manageQuiz) {
+        manageQuiz();
+        return $interval(function () {
+            manageQuiz();
+        }, this.durationOfFocusMarkInMilliseconds + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds + this.durationOfAnswerEvaluationInMilliseconds);
+    };
     return BaseController;
 })();
 //@ sourceMappingURL=BaseController.js.map

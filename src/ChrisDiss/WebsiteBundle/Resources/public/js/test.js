@@ -4,7 +4,7 @@
 function TestCtrl($scope, $interval, $timeout) {
     'use strict';
 
-    var manageQuizInterval;
+    var manageQuizInIntervals;
 
     /**
      * Base controller with extracted commonalities between the dryRun- and test-Controller,
@@ -30,20 +30,9 @@ function TestCtrl($scope, $interval, $timeout) {
         if ($scope.baseController.currentQuestionNumber <= $scope.baseController.numberOfQuestions) {
             $scope.baseController.manageAnotherQuestion($timeout);
         } else {
-            $scope.baseController.manageEndOfQuestions($interval, manageQuizInterval);
+            $scope.baseController.manageEndOfQuestions($interval, manageQuizInIntervals);
         }
     };
 
-    /**
-     * Bootstrap the manageQuiz-function.
-     */
-    $scope.manageQuiz();
-
-    /**
-     * Call the manageQuiz-function in intervals. The interval length consists out of the lengths of it's parts.
-     */
-    manageQuizInterval = $interval(
-        function () { $scope.manageQuiz(); },
-        $scope.baseController.durationOfFocusMarkInMilliseconds + $scope.baseController.delayBeforeTubeBoxInMilliseconds + $scope.baseController.durationOfUserInputListeningInMilliseconds + $scope.baseController.durationOfAnswerEvaluationInMilliseconds
-    );
+    manageQuizInIntervals = $scope.baseController.manageQuizInIntervals($interval, $scope.manageQuiz);
 }

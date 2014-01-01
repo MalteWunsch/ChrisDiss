@@ -7,8 +7,7 @@
  * AngularJS modules, which seem to use function objects, which should be easier to get along with prototypical
  * inheritance. Learn about prototypical inheritance.
  */
-class BaseController
-{
+class BaseController {
     /**
      * Constant number of questions to ask.
      *
@@ -234,5 +233,21 @@ class BaseController
                 $('#answerMarkedErroneous').show();
             }
         }
+    }
+
+    /**
+     * Kick start the manageQuiz function and call it in intervals. The interval length consists out of the lengths of
+     * it's parts.
+     *
+     * @param $interval
+     * @param manageQuiz
+     * @returns {*}
+     */
+    public manageQuizInIntervals($interval, manageQuiz) {
+        manageQuiz();
+        return $interval(
+            function () { manageQuiz(); },
+            this.durationOfFocusMarkInMilliseconds + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds + this.durationOfAnswerEvaluationInMilliseconds
+        );
     }
 }
