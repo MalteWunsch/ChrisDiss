@@ -103,11 +103,10 @@ class BaseController
      * 4) user entered wrong key and entered the "error noticed" key
      * 5) user entered correct key but entered the "error noticed" key
      *
-     * @returns {string}
+     * @returns {AnswerEvaluation}
      */
-    public getAnswerEvaluationAsText() {
-        return Answer.getEvaluation(this.answer, this.question)
-                     .getMessage();
+    public getAnswerEvaluation() {
+        return Answer.getEvaluation(this.answer, this.question);
     }
 
     /**

@@ -7,8 +7,8 @@ var BaseController = (function () {
         this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
     }
-    BaseController.prototype.getAnswerEvaluationAsText = function () {
-        return Answer.getEvaluation(this.answer, this.question).getMessage();
+    BaseController.prototype.getAnswerEvaluation = function () {
+        return Answer.getEvaluation(this.answer, this.question);
     };
     BaseController.prototype.manageAnotherQuestion = function ($timeout) {
         this.displayFocusMark($timeout);
