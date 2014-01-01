@@ -26,4 +26,12 @@ class WebsiteController extends Controller
     {
         return $this->render('ChrisDissWebsiteBundle:Website:dryRun.html.twig');
     }
+
+    /**
+     * After the dry run, a user takes the real test.
+     */
+    public function testAction()
+    {
+        return $this->render('ChrisDissWebsiteBundle:Website:test.html.twig');
+    }
 }

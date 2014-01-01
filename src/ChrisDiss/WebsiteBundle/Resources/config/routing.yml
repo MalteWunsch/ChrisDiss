@@ -8,4 +8,4 @@ dryRun:
 
 testung:
     pattern:  /testung
-    defaults: { _controller: ChrisDissWebsiteBundle:Website:testung }
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:test }

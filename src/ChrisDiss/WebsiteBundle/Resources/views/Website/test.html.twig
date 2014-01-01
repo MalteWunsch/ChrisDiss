@@ -1,0 +1,80 @@
+{% extends 'ChrisDissWebsiteBundle::layout.html.twig' %}
+
+{% set bodyid = 'test' %}
+{% set ngController = 'TestCtrl' %}
+{% set ngKeypress = 'baseController.handleUserInput($event)' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/chrisdisswebsite/css/dryRun-and-test.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/chrisdisswebsite/css/test.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# TODO: proper import management #}
+    <script src="{{ asset('bundles/chrisdisswebsite/js/KeyCodeHelper.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/Colour.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/ColourFactory.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/Question.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/QuestionFactory.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/Answer.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/AnswerEvaluations.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/TestResult.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/BaseController.js') }}"></script>
+    <script src="{{ asset('bundles/chrisdisswebsite/js/test.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="verticalCenterWrapper">
+        <div id="userFocusMarker">
+            .
+        </div>
+        <div id="answerEvaluation">
+            {{ '{{baseController.getAnswerEvaluation.getMessage()}}' }}
+        </div>
+        <div id="question">
+            <div class="blood-tube">
+                <span style="color:#{{ '{{baseController.question.getColourHex()}}' }};">{{ '{{baseController.question.getColourName()}}' }}</span>
+            </div>
+            <div class="tube-box">
+                {{ '{{baseController.question.getBoxColourName()}}' }}
+            </div>
+        </div>
+
+        <div id="endOfQuestions">
+            <p>
+                Vielen Dank für Ihre Teilnahme. Ihr Ergebnis:
+            </p>
+            <table>
+                <tr>
+                    <td></td>
+                    <th># als Fehler markiert</th>
+                    <th># nicht als Fehler markiert</th>
+                </tr>
+                <tr>
+                    <th># falsche Antworten</th>
+                    <td>{{ '{{testResult.getNumberOfMarkedWrongAnswers()}}' }}</td>
+                    <td>{{ '{{testResult.getNumberOfUnmarkedWrongAnswers()}}' }}</td>
+                </tr>
+                <tr>
+                    <th># richtige Antworten</th>
+                    <td>{{ '{{testResult.getNumberOfMarkedCorrectAnswers()}}' }}</td>
+                    <td>{{ '{{testResult.getNumberOfUnmarkedCorrectAnswers()}}' }}</td>
+                </tr>
+            </table>
+            <p>
+                # richtige Vertipper-Markierungen / Summe falscher Antworten = {{ '{{testResult.getNumberOfMarkedWrongAnswersDividedBySumOfWrongAnswers()}}' }}
+            </p>
+        </div>
+    </div>
+    <div id="errorDetectionNotice">
+        Bei Vertippen: Leertaste
+    </div>
+    <div id="lockedAnswer" class="key">
+        {{ '{{baseController.answer.getLetter()}}' }}
+    </div>
+    <div id="answerMarkedErroneous" class="key">
+        &nbsp;
+    </div>
+{% endblock %}
