@@ -74,6 +74,13 @@ class BaseController {
     public answer: Answer;
 
     /**
+     * Whether the reduced colour set for the test run should be used (true) or the full colour set (false).
+     *
+     * @type {boolean}
+     */
+    public decreasedColourSet: boolean;
+
+    /**
      * Constructor.
      *
      * @param numberOfQuestions number of questions to ask
@@ -86,6 +93,8 @@ class BaseController {
      * @param durationOfAnswerEvaluationInMilliseconds Constant duration in milliseconds the evaluation of the user's
      * answer is displayed.
      * @param percentageOfStroopQuestions Constant percentage of chance that a Question is a Stroop one.
+     * @param decreasedColourSet Whether the reduced colour set for the test run should be used (true) or the full
+     * colour set (false).
      */
     constructor(
         numberOfQuestions: number,
@@ -93,7 +102,8 @@ class BaseController {
         delayBeforeTubeBoxInMilliseconds: number,
         durationOfUserInputListeningInMilliseconds: number,
         durationOfAnswerEvaluationInMilliseconds: number,
-        percentageOfStroopQuestions: number
+        percentageOfStroopQuestions: number,
+        decreasedColourSet: boolean
     ) {
         this.numberOfQuestions = numberOfQuestions;
         this.currentQuestionNumber = 1;
@@ -102,6 +112,7 @@ class BaseController {
         this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
         this.percentageOfStroopQuestions = percentageOfStroopQuestions;
+        this.decreasedColourSet = decreasedColourSet;
     }
 
     /**
@@ -206,9 +217,9 @@ class BaseController {
     public setNextQuestion() {
         var dice100Result = Math.ceil(Math.random() * 100);
         if (dice100Result >= this.percentageOfStroopQuestions) {
-            this.question = QuestionFactory.getRegularQuestion(true);
+            this.question = QuestionFactory.getRegularQuestion(this.decreasedColourSet);
         } else {
-            this.question = QuestionFactory.getStroopQuestion(true);
+            this.question = QuestionFactory.getStroopQuestion(this.decreasedColourSet);
         }
         this.currentQuestionNumber += 1;
         this.answer = null;
