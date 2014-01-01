@@ -35,8 +35,13 @@ var TestResult = (function () {
         return this.unmarkedCorrectAnswers.length;
     };
     TestResult.prototype.getNumberOfMarkedWrongAnswersDividedBySumOfWrongAnswers = function () {
-        var sum = this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();
-        return (sum > 0) ? (this.getNumberOfMarkedWrongAnswers() / sum) : 'n/a';
+        if(this.getSumOfWrongAnswers() > 0) {
+            return this.getNumberOfMarkedWrongAnswers() / this.getSumOfWrongAnswers();
+        }
+        return 'n/a';
+    };
+    TestResult.prototype.getSumOfWrongAnswers = function () {
+        return this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();
     };
     return TestResult;
 })();

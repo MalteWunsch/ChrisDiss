@@ -82,7 +82,18 @@ class TestResult {
      * @returns {number|string}
      */
     public getNumberOfMarkedWrongAnswersDividedBySumOfWrongAnswers() {
-        var sum = this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();
-        return (sum > 0)? (this.getNumberOfMarkedWrongAnswers() / sum) : 'n/a';
+        if (this.getSumOfWrongAnswers() > 0) {
+            return this.getNumberOfMarkedWrongAnswers() / this.getSumOfWrongAnswers();
+        }
+        return 'n/a';
+    }
+
+    /**
+     * Get the sum of wrong answers (marked and unmarked).
+     *
+     * @returns {number}
+     */
+    public getSumOfWrongAnswers() {
+        return this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();
     }
 }
