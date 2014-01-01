@@ -37,7 +37,7 @@ var Answer = (function () {
         return this;
     };
     Answer.getEvaluation = function (myAnswer, question) {
-        if(myAnswer === null) {
+        if(myAnswer === null || myAnswer === undefined) {
             return new NoAnswerEvaluation();
         }
         if(myAnswer.isMarkedAsErroneous() === false) {

@@ -142,7 +142,7 @@ class Answer {
      * @returns {AnswerEvaluation}
      */
     public static getEvaluation = function (myAnswer: Answer, question: Question) {
-        if (myAnswer === null) {
+        if (myAnswer === null || myAnswer === undefined) {
             return new NoAnswerEvaluation();
         }
 
