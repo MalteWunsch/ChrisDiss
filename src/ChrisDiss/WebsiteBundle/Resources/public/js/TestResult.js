@@ -4,6 +4,7 @@ var TestResult = (function () {
         this.unmarkedWrongAnswers = [];
         this.markedCorrectAnswers = [];
         this.unmarkedCorrectAnswers = [];
+        this.noAnswers = [];
     }
     TestResult.prototype.add = function (evaluation) {
         if(evaluation instanceof CorrectlyMarkedAnswerAsWrongEvaluation) {
@@ -17,6 +18,10 @@ var TestResult = (function () {
                 } else {
                     if(evaluation instanceof CorrectAnswerEvaluation) {
                         this.unmarkedCorrectAnswers.push(evaluation);
+                    } else {
+                        if(evaluation instanceof NoAnswerEvaluation) {
+                            this.noAnswers.push(evaluation);
+                        }
                     }
                 }
             }
@@ -34,11 +39,11 @@ var TestResult = (function () {
     TestResult.prototype.getNumberOfUnmarkedCorrectAnswers = function () {
         return this.unmarkedCorrectAnswers.length;
     };
+    TestResult.prototype.getNumberOfNoAnswers = function () {
+        return this.noAnswers.length;
+    };
     TestResult.prototype.getNumberOfMarkedWrongAnswersDividedBySumOfWrongAnswers = function () {
-        if(this.getSumOfWrongAnswers() > 0) {
-            return this.getNumberOfMarkedWrongAnswers() / this.getSumOfWrongAnswers();
-        }
-        return 'n/a';
+        return (this.getSumOfWrongAnswers() > 0) ? (this.getNumberOfMarkedWrongAnswers() / this.getSumOfWrongAnswers()).toString() : 'n/a';
     };
     TestResult.prototype.getSumOfWrongAnswers = function () {
         return this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();

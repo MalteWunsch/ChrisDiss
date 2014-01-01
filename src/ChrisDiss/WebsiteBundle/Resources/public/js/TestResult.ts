@@ -23,6 +23,11 @@ class TestResult {
     unmarkedCorrectAnswers: CorrectAnswerEvaluation[] = [];
 
     /**
+     * Collection of "empty" Answers, where the user was not fast enough to type in their Answer.
+     */
+    noAnswers: NoAnswerEvaluation[] = [];
+
+    /**
      * Add an AnswerEvaluation to this TestResult.
      *
      * @param evaluation
@@ -36,6 +41,8 @@ class TestResult {
             this.markedCorrectAnswers.push(evaluation);
         } else if (evaluation instanceof CorrectAnswerEvaluation) {
             this.unmarkedCorrectAnswers.push(evaluation);
+        } else if (evaluation instanceof NoAnswerEvaluation) {
+            this.noAnswers.push(evaluation);
         }
     }
 
@@ -76,16 +83,22 @@ class TestResult {
     }
 
     /**
-     * Get the quotient of the number of marked wrong Answers divided by number of all wrong answers (marked and
-     * unmarked).
+     * Get the number of "empty" Answers, where the user was not fast enough to type in their Answer.
      *
-     * @returns {number|string}
+     * @returns {number}
+     */
+    public getNumberOfNoAnswers() {
+        return this.noAnswers.length;
+    }
+
+    /**
+     * Get the quotient of the number of marked wrong Answers divided by number of all wrong answers (marked and
+     * unmarked) as a string.
+     *
+     * @returns {string}
      */
     public getNumberOfMarkedWrongAnswersDividedBySumOfWrongAnswers() {
-        if (this.getSumOfWrongAnswers() > 0) {
-            return this.getNumberOfMarkedWrongAnswers() / this.getSumOfWrongAnswers();
-        }
-        return 'n/a';
+        return (this.getSumOfWrongAnswers() > 0)? (this.getNumberOfMarkedWrongAnswers() / this.getSumOfWrongAnswers()).toString() : 'n/a';
     }
 
     /**
