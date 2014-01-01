@@ -11,7 +11,7 @@ function TestCtrl($scope, $interval, $timeout) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(15, 3000, 1000, 3000, 0);
+    $scope.baseController = new BaseController(15, 3000, 1000, 3000, 0, 80);
 
     /**
      * Aggregation of the AnswerEvaluations.

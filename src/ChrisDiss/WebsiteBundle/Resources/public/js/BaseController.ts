@@ -53,6 +53,13 @@ class BaseController {
     public durationOfAnswerEvaluationInMilliseconds: number;
 
     /**
+     * Constant percentage of chance that a Question is a Stroop one.
+     *
+     * @type {number}
+     */
+    public percentageOfStroopQuestions: number;
+
+    /**
      * Current Question.
      *
      * @type {Question|null}
@@ -78,13 +85,15 @@ class BaseController {
      * after both the blood tube and the tube box have been displayed.
      * @param durationOfAnswerEvaluationInMilliseconds Constant duration in milliseconds the evaluation of the user's
      * answer is displayed.
+     * @param percentageOfStroopQuestions Constant percentage of chance that a Question is a Stroop one.
      */
     constructor(
         numberOfQuestions: number,
         durationOfFocusMarkInMilliseconds: number,
         delayBeforeTubeBoxInMilliseconds: number,
         durationOfUserInputListeningInMilliseconds: number,
-        durationOfAnswerEvaluationInMilliseconds: number
+        durationOfAnswerEvaluationInMilliseconds: number,
+        percentageOfStroopQuestions: number
     ) {
         this.numberOfQuestions = numberOfQuestions;
         this.currentQuestionNumber = 1;
@@ -92,6 +101,7 @@ class BaseController {
         this.delayBeforeTubeBoxInMilliseconds = delayBeforeTubeBoxInMilliseconds;
         this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
+        this.percentageOfStroopQuestions = percentageOfStroopQuestions;
     }
 
     /**
@@ -195,7 +205,7 @@ class BaseController {
      */
     public setNextQuestion() {
         var dice100Result = Math.ceil(Math.random() * 100);
-        if (dice100Result <= 50) {
+        if (dice100Result >= this.percentageOfStroopQuestions) {
             this.question = QuestionFactory.getRegularQuestion(true);
         } else {
             this.question = QuestionFactory.getStroopQuestion(true);

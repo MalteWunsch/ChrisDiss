@@ -1,11 +1,12 @@
 var BaseController = (function () {
-    function BaseController(numberOfQuestions, durationOfFocusMarkInMilliseconds, delayBeforeTubeBoxInMilliseconds, durationOfUserInputListeningInMilliseconds, durationOfAnswerEvaluationInMilliseconds) {
+    function BaseController(numberOfQuestions, durationOfFocusMarkInMilliseconds, delayBeforeTubeBoxInMilliseconds, durationOfUserInputListeningInMilliseconds, durationOfAnswerEvaluationInMilliseconds, percentageOfStroopQuestions) {
         this.numberOfQuestions = numberOfQuestions;
         this.currentQuestionNumber = 1;
         this.durationOfFocusMarkInMilliseconds = durationOfFocusMarkInMilliseconds;
         this.delayBeforeTubeBoxInMilliseconds = delayBeforeTubeBoxInMilliseconds;
         this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
+        this.percentageOfStroopQuestions = percentageOfStroopQuestions;
     }
     BaseController.prototype.getAnswerEvaluation = function () {
         return Answer.getEvaluation(this.answer, this.question);
@@ -50,7 +51,7 @@ var BaseController = (function () {
     };
     BaseController.prototype.setNextQuestion = function () {
         var dice100Result = Math.ceil(Math.random() * 100);
-        if(dice100Result <= 50) {
+        if(dice100Result >= this.percentageOfStroopQuestions) {
             this.question = QuestionFactory.getRegularQuestion(true);
         } else {
             this.question = QuestionFactory.getStroopQuestion(true);
