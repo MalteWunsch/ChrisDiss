@@ -2,7 +2,9 @@
 
 namespace ChrisDiss\WebsiteBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ChrisDiss\WebsiteBundle\Entity\User;
 
 /**
  * Main Controller for the website.
@@ -12,11 +14,27 @@ class WebsiteController extends Controller
     /**
      * Page where a users initially enters their personal code.
      *
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function codeFormAction()
+    public function codeFormAction(Request $request)
     {
-        return $this->render('ChrisDissWebsiteBundle:Website:codeForm.html.twig');
+        $user = new User();
+        $form = $this->createForm(
+            'code',
+            $user,
+            array('action' => $this->generateUrl($request->attributes->get('_route')))
+        );
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            // @TODO: session
+        }
+
+        return $this->render(
+            'ChrisDissWebsiteBundle:Website:codeForm.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**

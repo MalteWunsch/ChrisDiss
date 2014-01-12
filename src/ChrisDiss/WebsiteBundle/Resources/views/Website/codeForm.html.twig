@@ -11,6 +11,20 @@
 
 {% block content %}
     <p>
-        Bitte geben Sie Ihren Code ein, um fortzufahren.
+        Bitte geben Sie Ihren 5-stelligen Code ein, um fortzufahren.
     </p>
+
+    {{ form_start(form) }}
+        {% if (form.vars.valid == false) %}
+            <div class="errors">
+                Sie haben leider einen ungültigen Code eingegeben. Bitte versuchen Sie es erneut.
+            </div>
+        {% endif %}
+
+        {{ form_label(form.code) }}
+        {{ form_errors(form.code) }}
+        {{ form_widget(form.code) }}
+
+        {{ form_widget(form.save) }}
+    {{ form_end(form) }}
 {% endblock %}
