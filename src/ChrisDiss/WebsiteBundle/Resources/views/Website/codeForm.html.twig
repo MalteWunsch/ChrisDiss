@@ -1,0 +1,16 @@
+{% extends 'ChrisDissWebsiteBundle::layout.html.twig' %}
+
+{% set bodyid = 'codeForm' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/chrisdisswebsite/css/code-form.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% set heading = 'Willkommen bei mfa-praxis.de' %}
+
+{% block content %}
+    <p>
+        Bitte geben Sie Ihren Code ein, um fortzufahren.
+    </p>
+{% endblock %}

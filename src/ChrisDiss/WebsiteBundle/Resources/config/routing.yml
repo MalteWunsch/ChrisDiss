@@ -1,6 +1,10 @@
-initialInstructions:
+codeForm:
     pattern:  /
-    defaults: { _controller: ChrisDissWebsiteBundle:Website:initialInstructions }
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:codeForm }
+
+instructions:
+    pattern:  /anleitung
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:instructions }
 
 dryRun:
     pattern:  /uebungsaufgaben

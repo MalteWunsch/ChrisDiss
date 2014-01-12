@@ -13,7 +13,7 @@ div.important {
 div.image-keyboard {
     width: 708px;
     height: 163px;
-    background-image: url('../images/initialInstructions/keyboard.png');
+    background-image: url('../images/instructions/keyboard.png');
     margin-left: auto;
     margin-right: auto;
 }

@@ -10,17 +10,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class WebsiteController extends Controller
 {
     /**
-     * First page where a users enters displaying the instructions.
+     * Page where a users initially enters their personal code.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function initialInstructionsAction()
+    public function codeFormAction()
     {
-        return $this->render('ChrisDissWebsiteBundle:Website:initialInstructions.html.twig');
+        return $this->render('ChrisDissWebsiteBundle:Website:codeForm.html.twig');
+    }
+
+    /**
+     * Page where a users enters displaying the instructions.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function instructionsAction()
+    {
+        return $this->render('ChrisDissWebsiteBundle:Website:instructions.html.twig');
     }
 
     /**
      * After reading the initial instructions, a user takes a dry run to get to know the quiz mechanics.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function dryRunAction()
     {
@@ -29,6 +41,8 @@ class WebsiteController extends Controller
 
     /**
      * After the dry run, a user takes the real test.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function testAction()
     {
