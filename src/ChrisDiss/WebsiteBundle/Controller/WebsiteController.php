@@ -5,6 +5,7 @@ namespace ChrisDiss\WebsiteBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ChrisDiss\WebsiteBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Main Controller for the website.
@@ -91,5 +92,36 @@ class WebsiteController extends Controller
         }
 
         return $this->render('ChrisDissWebsiteBundle:Website:test.html.twig');
+    }
+
+    /**
+     * After the test, save it's result. This action is called via AJAX only.
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function saveResultAction(Request $request)
+    {
+        $session = $request->getSession();
+        if (!($session->get('user') instanceof User)) {
+            return $this->redirect($this->generateUrl('codeForm'));
+        }
+
+        /* @var $user User */
+        $user = $session->get('user');
+        $user->setMarkedWrongAnswers((int) $request->get('markedWrongAnswers'))
+             ->setUnmarkedWrongAnswers((int) $request->get('unmarkedWrongAnswers'))
+             ->setMarkedCorrectAnswers((int) $request->get('markedCorrectAnswers'))
+             ->setUnmarkedCorrectAnswers((int) $request->get('unmarkedCorrectAnswers'))
+             ->setNoAnswers((int) $request->get('noAnswers'))
+             ->setCreatedAt(new \DateTime());
+
+        /* @var $om \Doctrine\Common\Persistence\ObjectManager */
+        $om = $this->getDoctrine()
+                   ->getManager();
+        $om->persist($user);
+        $om->flush();
+
+        return new Response();
     }
 }

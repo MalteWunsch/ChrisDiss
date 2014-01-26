@@ -13,3 +13,7 @@ dryRun:
 testung:
     pattern:  /testung
     defaults: { _controller: ChrisDissWebsiteBundle:Website:test }
+
+saveResult:
+    pattern:  /save-result
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:saveResult }
