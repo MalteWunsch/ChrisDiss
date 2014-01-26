@@ -1,7 +1,7 @@
 /**
  * AngularJS-controller for the real test.
  */
-function TestCtrl($scope, $timeout) {
+function TestCtrl($scope, $timeout, $http) {
     'use strict';
 
     /**
@@ -39,6 +39,7 @@ function TestCtrl($scope, $timeout) {
         var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation();
 
         if ($scope.quizShouldEnd() === true) {
+            $scope.saveResult();
             $scope.baseController.manageEndOfQuestions();
         } else {
             $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope);
@@ -81,6 +82,59 @@ function TestCtrl($scope, $timeout) {
             enoughWrongAnswersGiven = $scope.testResult.getSumOfWrongAnswers() >= $scope.enoughWrongAnswersGiven;
 
         return allQuestionsAsked || enoughWrongAnswersGiven;
+    };
+
+    /**
+     * Save the test result via an AJAX call.
+     */
+    $scope.saveResult = function () {
+        $http(
+            {
+                method: 'POST',
+                url: $scope.getUrlForSavingResult(),
+                data: $scope.getPostDataForSavingResult(),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }
+        ).success(
+            function(data, status, headers, config) {
+            }
+        ).error(
+            function(data, status, headers, config) {
+                alert('Leider ist ein Fehler aufgetreten. (Fehlercode: ' + status + ')');
+            }
+        );
+    }
+
+    /**
+     * Get the URL for saving the test result.
+     *
+     * @returns {string}
+     */
+    $scope.getUrlForSavingResult = function () {
+        var urlForSavingResult,
+            currentPath = window.location.pathname;
+
+        if (currentPath.charAt(0) !== '/') {
+            currentPath = '/' + currentPath;
+        }
+        urlForSavingResult = currentPath.substr(0, currentPath.indexOf('/testung')) + '/save-result';
+
+        return urlForSavingResult;
+    };
+
+    /**
+     * Get the data for saving the result as a string, suitable for the request body.
+     *
+     * @returns {string}
+     */
+    $scope.getPostDataForSavingResult = function () {
+        return $.param({
+            'markedWrongAnswers' : $scope.testResult.getNumberOfMarkedWrongAnswers(),
+            'unmarkedWrongAnswers': $scope.testResult.getNumberOfUnmarkedWrongAnswers(),
+            'markedCorrectAnswers': $scope.testResult.getNumberOfMarkedCorrectAnswers(),
+            'unmarkedCorrectAnswers': $scope.testResult.getNumberOfUnmarkedCorrectAnswers(),
+            'noAnswers': $scope.testResult.getNumberOfNoAnswers()
+        });
     };
 
     $scope.manageQuiz();
