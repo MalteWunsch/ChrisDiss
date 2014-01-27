@@ -18,7 +18,7 @@ class QuestionFactory
      *
      * @returns {Question}
      */
-    public static getRegularQuestion = function (colourSetForDryRun: boolean) {
+    public static getRegularQuestion(colourSetForDryRun: boolean) {
         var colour = ColourFactory.getRandomColour(colourSetForDryRun);
         return new Question(colour, colour);
     };
