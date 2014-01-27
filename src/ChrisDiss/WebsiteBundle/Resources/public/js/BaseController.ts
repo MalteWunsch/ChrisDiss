@@ -153,9 +153,9 @@ class BaseController {
             function () {
                 var dice100Result = Math.ceil(Math.random() * 100);
                 if (dice100Result >= $scope.baseController.percentageOfStroopQuestions) {
-                    $scope.baseController.question = QuestionFactory.getRegularQuestion(this.decreasedColourSet);
+                    $scope.baseController.question = QuestionFactory.getRegularQuestion($scope.baseController.decreasedColourSet);
                 } else {
-                    $scope.baseController.question = QuestionFactory.getStroopQuestion(this.decreasedColourSet);
+                    $scope.baseController.question = QuestionFactory.getStroopQuestion($scope.baseController.decreasedColourSet);
                 }
                 $scope.baseController.currentQuestionNumber += 1;
                 $scope.baseController.answer = null;
