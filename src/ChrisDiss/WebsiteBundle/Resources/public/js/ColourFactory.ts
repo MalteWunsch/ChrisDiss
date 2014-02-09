@@ -7,20 +7,19 @@ class ColourFactory
      * Collection of all known Colours.
      */
     static colours = [
-        new Colour('rot', 'ff0000'),
-        new Colour('grün', '00ff00'),
-        new Colour('blau', '0000ff'),
-        new Colour('pink', 'ff00ff'),
-        new Colour('türkis', '00ffff'),
-        new Colour('schwarz', '000000')
+        new Colour('ROT', 'ff0000'),
+        new Colour('GRÜN', '009900'),
+        new Colour('BLAU', '0000ff'),
+        new Colour('PINK', 'ff00ff'),
+        new Colour("BRAUN", '8B4C39')
     ];
 
     /**
      * Collection of the Colours available in the dry run.
      */
     static dryRunColours = [
-        new Colour('rot', 'ff0000'),
-        new Colour('blau', '0000ff')
+        new Colour('ROT', 'ff0000'),
+        new Colour('BLAU', '0000ff')
     ];
 
     /**
