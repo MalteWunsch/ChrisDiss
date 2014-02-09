@@ -1,3 +1,6 @@
+/// <reference path="AnswerEvaluations.ts" />
+/// <reference path="Question.ts" />
+
 /**
  * A user's Answer to a Question originates from the letter key a user presses during a special time frame (when the
  * Question as a whole is displayed). After that, they can mark it as erroneous. A user's answer is not guaranteed to be
@@ -7,7 +10,7 @@ class Answer {
     /**
      * Whether an answer can be entered now.
      *
-     * @type {bool}
+     * @type {boolean}
      */
     private static canBeEnteredNow: boolean;
 
@@ -57,7 +60,7 @@ class Answer {
     /**
      * Get whether answers can be entered now.
      *
-     * @returns {boolean}
+     * @returns {bool}
      */
     public static getCanBeEnteredNow() {
         return (this.canBeEnteredNow === true);
@@ -104,7 +107,7 @@ class Answer {
     /**
      * Get whether this answer was marked as being erroneous (whether this is correct in that mark or not).
      *
-     * @returns {boolean}
+     * @returns {bool}
      */
     public isMarkedAsErroneous() {
         return (this.markedAsErroneous === true);
@@ -124,7 +127,7 @@ class Answer {
      * Returns whether this answer means "Yes, the colour of the blood tube label corresponds to the label on the tube
      * box"
      *
-     * @returns {boolean}
+     * @returns {bool}
      */
     public getAsBoolean = function () {
         var characterForYes = Answer.getCharacterForYes();

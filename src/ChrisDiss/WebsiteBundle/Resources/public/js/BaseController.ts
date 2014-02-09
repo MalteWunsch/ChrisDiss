@@ -1,3 +1,9 @@
+/// <reference path="../../../../../../vendor/borisyankov/definitely-typed/jquery/jquery.d.ts" />
+/// <reference path="Question.ts" />
+/// <reference path="QuestionFactory.ts" />
+/// <reference path="Answer.ts" />
+/// <reference path="KeyCodeHelper.ts" />
+
 /**
  * Base controller for extracting commonalities between the dryRun- and test-Controller, implemented as a composite
  * because currently I'm not cleverer than that.

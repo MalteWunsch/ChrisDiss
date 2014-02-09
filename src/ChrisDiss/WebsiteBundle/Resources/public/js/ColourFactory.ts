@@ -24,6 +24,9 @@ class ColourFactory
 
     /**
      * Get a random Colour.
+     *
+     * @param colourSetForDryRun whether the question should be producted with the reduced colour set for the dry run.
+     * @returns {Colour}
      */
     public static getRandomColour(colourSetForDryRun: boolean) {
         var index,
@@ -35,6 +38,9 @@ class ColourFactory
 
     /**
      * Get two distinct Colours.
+     *
+     * @param colourSetForDryRun whether the question should be producted with the reduced colour set for the dry run.
+     * @returns {Colour[]}
      */
     public static getTwoDistinctColours(colourSetForDryRun: boolean) {
         var firstColour = this.getRandomColour(colourSetForDryRun);

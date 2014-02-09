@@ -1,3 +1,5 @@
+/// <reference path="Colour.ts" />
+
 /**
  * The Question class is for plain, immutable value objects. A Question contains three Colours: one which name is
  * displayed on the blood tube, one which hex code is used to colour the aforementioned name and a third one which name

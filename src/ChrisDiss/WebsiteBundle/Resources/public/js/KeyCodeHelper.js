@@ -1,12 +1,16 @@
+/**
+* Helps juggling with key codes.
+*/
 var KeyCodeHelper = (function () {
-    function KeyCodeHelper() { }
+    function KeyCodeHelper() {
+    }
     KeyCodeHelper.shiftKeyCodeToLowerCasedLetterIfApplicable = function (keyCode) {
         var lowerCasedKeyCode = keyCode;
-        if(keyCode >= 65 && keyCode <= 90) {
+        if (keyCode >= 65 && keyCode <= 90) {
             lowerCasedKeyCode += 32;
         }
         return lowerCasedKeyCode;
     };
     return KeyCodeHelper;
 })();
-//@ sourceMappingURL=KeyCodeHelper.js.map
+//# sourceMappingURL=KeyCodeHelper.js.map

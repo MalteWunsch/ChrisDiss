@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8e73969404c613fb3d9bc3ad0e889024",
+    "hash": "d2daec72ec67cc314b3f8b7e5300dc3b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1536,6 +1536,17 @@
     ],
     "packages-dev": [
         {
+            "name": "borisyankov/definitely-typed",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/borisyankov/DefinitelyTyped.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "time": "2014-02-08 12:56:41"
+        },
+        {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.15",
             "source": {
@@ -1907,9 +1918,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "borisyankov/definitely-typed": 20
+    },
     "platform": {
         "php": ">=5.3.3"
     },

@@ -1,3 +1,5 @@
+/// <reference path="BaseController.ts" />
+
 /**
  * AngularJS-controller for the dry run.
  */

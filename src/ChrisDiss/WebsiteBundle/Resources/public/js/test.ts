@@ -1,3 +1,7 @@
+/// <reference path="../../../../../../vendor/borisyankov/definitely-typed/jquery/jquery.d.ts" />
+/// <reference path="BaseController.ts" />
+/// <reference path="TestResult.ts" />
+
 /**
  * AngularJS-controller for the real test.
  */
