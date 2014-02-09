@@ -24,15 +24,14 @@ class Question {
      *
      * @param colourForName Colour that is used for displaying the Colour name.
      * @param colourForHex Colour that is used for displaying the Colour hex code.
+     * @param colourForBox Colour of which the name is used as a label for the tube box.
      */
-    constructor(colourForName: Colour, colourForHex: Colour) {
+    constructor(colourForName: Colour, colourForHex: Colour, colourForBox: Colour) {
         var headsOrTails;
 
         this.colourForName = colourForName;
         this.colourForHex = colourForHex;
-
-        headsOrTails = Math.floor(Math.random() * 2);
-        this.colourForBox = (headsOrTails === 0) ? colourForHex : colourForName;
+        this.colourForBox = colourForBox;
     }
 
     /**

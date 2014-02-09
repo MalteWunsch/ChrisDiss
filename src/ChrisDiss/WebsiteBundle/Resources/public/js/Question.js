@@ -1,10 +1,9 @@
 var Question = (function () {
-    function Question(colourForName, colourForHex) {
+    function Question(colourForName, colourForHex, colourForBox) {
         var headsOrTails;
         this.colourForName = colourForName;
         this.colourForHex = colourForHex;
-        headsOrTails = Math.floor(Math.random() * 2);
-        this.colourForBox = (headsOrTails === 0) ? colourForHex : colourForName;
+        this.colourForBox = colourForBox;
     }
     Question.prototype.getColourName = function () {
         return this.colourForName.getName();

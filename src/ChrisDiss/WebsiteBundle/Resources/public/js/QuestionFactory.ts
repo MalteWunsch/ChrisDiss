@@ -9,8 +9,9 @@ class QuestionFactory
      * @returns {Question}
      */
     public static getStroopQuestion(colourSetForDryRun: boolean) {
-        var colours = ColourFactory.getTwoDistinctColours(colourSetForDryRun);
-        return new Question(colours[0], colours[1]);
+        var colours = ColourFactory.getTwoDistinctColours(colourSetForDryRun),
+            colourForBox = ColourFactory.getRandomColour(colourSetForDryRun);
+        return new Question(colours[0], colours[1], colourForBox);
     };
 
     /**
@@ -19,7 +20,8 @@ class QuestionFactory
      * @returns {Question}
      */
     public static getRegularQuestion(colourSetForDryRun: boolean) {
-        var colour = ColourFactory.getRandomColour(colourSetForDryRun);
-        return new Question(colour, colour);
+        var colour = ColourFactory.getRandomColour(colourSetForDryRun),
+            colourForBox = ColourFactory.getRandomColour(colourSetForDryRun);
+        return new Question(colour, colour, colourForBox);
     };
 }
