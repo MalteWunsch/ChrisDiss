@@ -13,6 +13,25 @@ function DryRunCtrl($scope, $timeout) {
     $scope.baseController = new BaseController(10, 2000, 1000, 3000, 3000, 50, true);
 
     /**
+    * Fixed set of questions for the dry run, so that each user has seen examples for questions that have the answer
+    * 'yes' and 'no' (for all different reasons).
+    *
+    * @type {Question[]}
+    */
+    $scope.questionsForDryRun = [
+        new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('blau'), ColourFactory.getByName('blau')),
+        new Question(ColourFactory.getByName('rot'), ColourFactory.getByName('rot'), ColourFactory.getByName('blau')),
+        new Question(ColourFactory.getByName('rot'), ColourFactory.getByName('blau'), ColourFactory.getByName('blau')),
+        new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('rot'), ColourFactory.getByName('blau')),
+        new Question(ColourFactory.getByName('rot'), ColourFactory.getByName('rot'), ColourFactory.getByName('rot')),
+        new Question(ColourFactory.getByName('rot'), ColourFactory.getByName('blau'), ColourFactory.getByName('rot')),
+        new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('rot'), ColourFactory.getByName('rot')),
+        new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('blau'), ColourFactory.getByName('rot')),
+        new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('rot'), ColourFactory.getByName('blau')),
+        new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('rot'), ColourFactory.getByName('rot'))
+    ];
+
+    /**
     * Manage the quiz control flow.
     */
     $scope.manageQuiz = function () {
@@ -21,8 +40,24 @@ function DryRunCtrl($scope, $timeout) {
         if ($scope.quizShouldEnd() === true) {
             $scope.baseController.manageEndOfQuestions();
         } else {
-            $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope);
+            $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope, $scope.setNextQuestion);
         }
+    };
+
+    /**
+    * Starting at the timeIndex after the focus mark, set a new Question, with it randomly being a Stroop or a regular
+    * one. That deletes the former answer.
+    *
+    * @param $timeout AngularJS timeout function to delay execution of a function.
+    * @param timeIndex delay for the $timeout in milliseconds.
+    * @param $scope AngularJS $scope.
+    */
+    $scope.setNextQuestion = function ($timeout, timeIndex, $scope) {
+        $timeout(function () {
+            $scope.baseController.question = $scope.questionsForDryRun[$scope.baseController.currentQuestionNumber - 1];
+            $scope.baseController.currentQuestionNumber += 1;
+            $scope.baseController.answer = null;
+        }, timeIndex);
     };
 
     /**

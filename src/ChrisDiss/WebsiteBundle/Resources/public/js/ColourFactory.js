@@ -31,6 +31,24 @@ var ColourFactory = (function () {
         }
         return [firstColour, secondColour];
     };
+
+    /**
+    * Get a Colour by it's name.
+    *
+    * @param name
+    * @returns {Colour}
+    */
+    ColourFactory.getByName = function (name) {
+        var index;
+
+        for (index in ColourFactory.colours) {
+            if (ColourFactory.colours[index].getName().toLowerCase() === name.toLowerCase()) {
+                return ColourFactory.colours[index];
+            }
+        }
+
+        throw 'No Colour with the name "' + name + '" found.';
+    };
     ColourFactory.colours = [
         new Colour('ROT', 'ff0000'),
         new Colour('GRÜN', '009900'),

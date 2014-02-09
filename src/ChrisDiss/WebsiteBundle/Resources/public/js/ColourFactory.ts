@@ -50,4 +50,22 @@ class ColourFactory
         }
         return [firstColour, secondColour];
     }
+
+    /**
+     * Get a Colour by it's name.
+     *
+     * @param name
+     * @returns {Colour}
+     */
+    public static getByName(name: string) {
+        var index: any;
+
+        for (index in ColourFactory.colours) {
+            if (ColourFactory.colours[index].getName().toLowerCase() === name.toLowerCase()) {
+                return ColourFactory.colours[index];
+            }
+        }
+
+        throw 'No Colour with the name "' + name + '" found.';
+    }
 }

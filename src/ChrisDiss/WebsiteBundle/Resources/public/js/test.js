@@ -45,8 +45,29 @@ function TestCtrl($scope, $timeout, $http) {
             $scope.saveResult();
             $scope.baseController.manageEndOfQuestions();
         } else {
-            $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope);
+            $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope, $scope.setNextQuestion);
         }
+    };
+
+    /**
+    * Starting at the timeIndex after the focus mark, set a new Question, with it randomly being a Stroop or a regular
+    * one. That deletes the former answer.
+    *
+    * @param $timeout AngularJS timeout function to delay execution of a function.
+    * @param timeIndex delay for the $timeout in milliseconds.
+    * @param $scope AngularJS $scope.
+    */
+    $scope.setNextQuestion = function ($timeout, timeIndex, $scope) {
+        $timeout(function () {
+            var dice100Result = Math.ceil(Math.random() * 100);
+            if (dice100Result >= $scope.baseController.percentageOfStroopQuestions) {
+                $scope.baseController.question = QuestionFactory.getRegularQuestion($scope.baseController.decreasedColourSet);
+            } else {
+                $scope.baseController.question = QuestionFactory.getStroopQuestion($scope.baseController.decreasedColourSet);
+            }
+            $scope.baseController.currentQuestionNumber += 1;
+            $scope.baseController.answer = null;
+        }, timeIndex);
     };
 
     /**
