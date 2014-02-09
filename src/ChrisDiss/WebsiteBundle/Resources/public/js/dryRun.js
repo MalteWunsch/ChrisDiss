@@ -9,7 +9,7 @@ function DryRunCtrl($scope, $timeout) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(15, 3000, 1000, 3000, 3000, 50, true);
+    $scope.baseController = new BaseController(10, 2000, 1000, 3000, 3000, 50, true);
 
     /**
      * Manage the quiz control flow.
