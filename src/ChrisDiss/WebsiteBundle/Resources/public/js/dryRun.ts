@@ -11,7 +11,7 @@ function DryRunCtrl($scope, $timeout) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(10, 2000, 1000, 3000, 3000, 50, true);
+    $scope.baseController = new BaseController(10, 2000, 1000, 3000, 3000, 50);
 
     /**
      * Fixed set of questions for the dry run, so that each user has seen examples for questions that have the answer

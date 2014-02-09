@@ -15,38 +15,25 @@ class ColourFactory
     ];
 
     /**
-     * Collection of the Colours available in the dry run.
-     */
-    static dryRunColours = [
-        new Colour('ROT', 'ff0000'),
-        new Colour('BLAU', '0000ff')
-    ];
-
-    /**
      * Get a random Colour.
      *
-     * @param colourSetForDryRun whether the question should be producted with the reduced colour set for the dry run.
      * @returns {Colour}
      */
-    public static getRandomColour(colourSetForDryRun: boolean) {
-        var index,
-            colourSet = (colourSetForDryRun === true)? this.dryRunColours : this.colours;
-
-        index = Math.floor(Math.random() * colourSet.length);
-        return colourSet[index];
+    public static getRandomColour() {
+        var index = Math.floor(Math.random() * this.colours.length);
+        return this.colours[index];
     }
 
     /**
      * Get two distinct Colours.
      *
-     * @param colourSetForDryRun whether the question should be producted with the reduced colour set for the dry run.
      * @returns {Colour[]}
      */
-    public static getTwoDistinctColours(colourSetForDryRun: boolean) {
-        var firstColour = this.getRandomColour(colourSetForDryRun);
-        var secondColour = this.getRandomColour(colourSetForDryRun);
+    public static getTwoDistinctColours() {
+        var firstColour = this.getRandomColour();
+        var secondColour = this.getRandomColour();
         while (secondColour === firstColour) {
-            secondColour = this.getRandomColour(colourSetForDryRun);
+            secondColour = this.getRandomColour();
         }
         return [firstColour, secondColour];
     }

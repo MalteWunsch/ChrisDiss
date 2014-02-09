@@ -27,7 +27,7 @@ function TestCtrl($scope, $timeout, $http) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(100, 2000, 200, 1100, 3000, 80, false);
+    $scope.baseController = new BaseController(100, 2000, 200, 1100, 3000, 80);
 
     /**
      * Aggregation of the AnswerEvaluations.
@@ -68,9 +68,9 @@ function TestCtrl($scope, $timeout, $http) {
             function () {
                 var dice100Result = Math.ceil(Math.random() * 100);
                 if (dice100Result >= $scope.baseController.percentageOfStroopQuestions) {
-                    $scope.baseController.question = QuestionFactory.getRegularQuestion($scope.baseController.decreasedColourSet);
+                    $scope.baseController.question = QuestionFactory.getRegularQuestion();
                 } else {
-                    $scope.baseController.question = QuestionFactory.getStroopQuestion($scope.baseController.decreasedColourSet);
+                    $scope.baseController.question = QuestionFactory.getStroopQuestion();
                 }
                 $scope.baseController.currentQuestionNumber += 1;
                 $scope.baseController.answer = null;

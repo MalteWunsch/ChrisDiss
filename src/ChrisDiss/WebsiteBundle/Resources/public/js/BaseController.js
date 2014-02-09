@@ -26,10 +26,8 @@ var BaseController = (function () {
     * @param durationOfAnswerEvaluationInMilliseconds Constant duration in milliseconds the evaluation of the user's
     * answer is displayed.
     * @param percentageOfStroopQuestions Constant percentage of chance that a Question is a Stroop one.
-    * @param decreasedColourSet Whether the reduced colour set for the test run should be used (true) or the full
-    * colour set (false).
     */
-    function BaseController(numberOfQuestions, durationOfFocusMarkInMilliseconds, delayBeforeTubeBoxInMilliseconds, durationOfUserInputListeningInMilliseconds, durationOfAnswerEvaluationInMilliseconds, percentageOfStroopQuestions, decreasedColourSet) {
+    function BaseController(numberOfQuestions, durationOfFocusMarkInMilliseconds, delayBeforeTubeBoxInMilliseconds, durationOfUserInputListeningInMilliseconds, durationOfAnswerEvaluationInMilliseconds, percentageOfStroopQuestions) {
         this.numberOfQuestions = numberOfQuestions;
         this.currentQuestionNumber = 1;
         this.durationOfFocusMarkInMilliseconds = durationOfFocusMarkInMilliseconds;
@@ -37,7 +35,6 @@ var BaseController = (function () {
         this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
         this.percentageOfStroopQuestions = percentageOfStroopQuestions;
-        this.decreasedColourSet = decreasedColourSet;
     }
     /**
     * Manages giving the user the next Question.

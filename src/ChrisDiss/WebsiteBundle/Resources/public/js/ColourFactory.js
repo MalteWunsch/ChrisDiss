@@ -7,27 +7,23 @@ var ColourFactory = (function () {
     /**
     * Get a random Colour.
     *
-    * @param colourSetForDryRun whether the question should be producted with the reduced colour set for the dry run.
     * @returns {Colour}
     */
-    ColourFactory.getRandomColour = function (colourSetForDryRun) {
-        var index, colourSet = (colourSetForDryRun === true) ? this.dryRunColours : this.colours;
-
-        index = Math.floor(Math.random() * colourSet.length);
-        return colourSet[index];
+    ColourFactory.getRandomColour = function () {
+        var index = Math.floor(Math.random() * this.colours.length);
+        return this.colours[index];
     };
 
     /**
     * Get two distinct Colours.
     *
-    * @param colourSetForDryRun whether the question should be producted with the reduced colour set for the dry run.
     * @returns {Colour[]}
     */
-    ColourFactory.getTwoDistinctColours = function (colourSetForDryRun) {
-        var firstColour = this.getRandomColour(colourSetForDryRun);
-        var secondColour = this.getRandomColour(colourSetForDryRun);
+    ColourFactory.getTwoDistinctColours = function () {
+        var firstColour = this.getRandomColour();
+        var secondColour = this.getRandomColour();
         while (secondColour === firstColour) {
-            secondColour = this.getRandomColour(colourSetForDryRun);
+            secondColour = this.getRandomColour();
         }
         return [firstColour, secondColour];
     };
@@ -55,11 +51,6 @@ var ColourFactory = (function () {
         new Colour('BLAU', '0000ff'),
         new Colour('PINK', 'ff00ff'),
         new Colour("BRAUN", '8B4C39')
-    ];
-
-    ColourFactory.dryRunColours = [
-        new Colour('ROT', 'ff0000'),
-        new Colour('BLAU', '0000ff')
     ];
     return ColourFactory;
 })();

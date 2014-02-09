@@ -62,11 +62,6 @@ class BaseController {
     public answer: Answer;
 
     /**
-     * Whether the reduced colour set for the test run should be used (true) or the full colour set (false).
-     */
-    public decreasedColourSet: boolean;
-
-    /**
      * Constructor.
      *
      * @param numberOfQuestions number of questions to ask
@@ -79,8 +74,6 @@ class BaseController {
      * @param durationOfAnswerEvaluationInMilliseconds Constant duration in milliseconds the evaluation of the user's
      * answer is displayed.
      * @param percentageOfStroopQuestions Constant percentage of chance that a Question is a Stroop one.
-     * @param decreasedColourSet Whether the reduced colour set for the test run should be used (true) or the full
-     * colour set (false).
      */
     constructor(
         numberOfQuestions: number,
@@ -88,8 +81,7 @@ class BaseController {
         delayBeforeTubeBoxInMilliseconds: number,
         durationOfUserInputListeningInMilliseconds: number,
         durationOfAnswerEvaluationInMilliseconds: number,
-        percentageOfStroopQuestions: number,
-        decreasedColourSet: boolean
+        percentageOfStroopQuestions: number
     ) {
         this.numberOfQuestions = numberOfQuestions;
         this.currentQuestionNumber = 1;
@@ -97,8 +89,7 @@ class BaseController {
         this.delayBeforeTubeBoxInMilliseconds = delayBeforeTubeBoxInMilliseconds;
         this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
-        this.percentageOfStroopQuestions = percentageOfStroopQuestions;
-        this.decreasedColourSet = decreasedColourSet;
+        this.percentageOfStroopQuestions = percentageOfStroopQuestions
     }
 
     /**
