@@ -23,7 +23,7 @@ function TestCtrl($scope, $timeout, $http) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(100, 3000, 1000, 3000, 3000, 80, false);
+    $scope.baseController = new BaseController(100, 2000, 200, 1100, 3000, 80, false);
 
     /**
      * Aggregation of the AnswerEvaluations.
