@@ -69,7 +69,7 @@ class WrongAnswerEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Ihre Antwort war leider falsch.');
+        super('Ihre Antwort war falsch.');
     }
 }
 

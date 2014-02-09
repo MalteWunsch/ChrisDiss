@@ -33,7 +33,7 @@ var CorrectAnswerEvaluation = (function (_super) {
 var WrongAnswerEvaluation = (function (_super) {
     __extends(WrongAnswerEvaluation, _super);
     function WrongAnswerEvaluation() {
-        _super.call(this, 'Ihre Antwort war leider falsch.');
+        _super.call(this, 'Ihre Antwort war falsch.');
     }
     return WrongAnswerEvaluation;
 })(AnswerEvaluation);
