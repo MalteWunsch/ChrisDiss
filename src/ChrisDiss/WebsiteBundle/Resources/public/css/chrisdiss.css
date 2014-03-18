@@ -1,6 +1,6 @@
 body {
     background-color: #000000;
-    color: #ffffff;
+    color: #eee;
 }
 
 body#codeForm div.content {
@@ -15,6 +15,19 @@ body#codeForm div.content {
     left: 50%;
     width: 400px;
     margin-left: -200px;
+}
+
+.well {
+    background-color: #444;
+    border-color: #eee;
+}
+
+body#instructions div.content {
+    position:absolute;
+
+    left: 50%;
+    width: 780px;
+    margin-left: -390px;
 }
 
 div.blood-tube, div.tube-box {
