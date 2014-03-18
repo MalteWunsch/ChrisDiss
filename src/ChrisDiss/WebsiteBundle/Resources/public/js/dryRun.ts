@@ -7,13 +7,6 @@ function DryRunCtrl($scope, $timeout) {
     'use strict';
 
     /**
-     * Base controller with extracted commonalities between the dryRun- and test-Controller,
-     *
-     * @type {BaseController}
-     */
-    $scope.baseController = new BaseController(10, 2000, 1000, 3000, 3000, 50);
-
-    /**
      * Fixed set of questions for the dry run, so that each user has seen examples for questions that have the answer
      * 'yes' and 'no' (for all different reasons).
      *
@@ -31,6 +24,13 @@ function DryRunCtrl($scope, $timeout) {
         new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('rot'), ColourFactory.getByName('blau')),
         new Question(ColourFactory.getByName('blau'), ColourFactory.getByName('rot'), ColourFactory.getByName('rot'))
     ];
+
+    /**
+     * Base controller with extracted commonalities between the dryRun- and test-Controller,
+     *
+     * @type {BaseController}
+     */
+    $scope.baseController = new BaseController($scope.questionsForDryRun.length, 2000, 1000, 3000, 3000, 50);
 
     /**
      * Manage the quiz control flow.
