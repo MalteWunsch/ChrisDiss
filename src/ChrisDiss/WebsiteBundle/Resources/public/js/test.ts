@@ -77,7 +77,7 @@ function TestCtrl($scope, $timeout, $http) {
             },
             timeIndex
         );
-    }
+    };
 
     /**
      * Manage the evaluation of the user's answer: For the real test run, store the evaluation in the test result and
@@ -129,14 +129,13 @@ function TestCtrl($scope, $timeout, $http) {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }
         ).success(
-            function(data, status, headers, config) {
-            }
+            function() {}
         ).error(
-            function(data, status, headers, config) {
+            function(data, status) {
                 alert('Leider ist ein Fehler aufgetreten. (Fehlercode: ' + status + ')');
             }
         );
-    }
+    };
 
     /**
      * Get the URL for saving the test result.

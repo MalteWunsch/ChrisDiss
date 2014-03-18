@@ -115,8 +115,8 @@ function TestCtrl($scope, $timeout, $http) {
             url: $scope.getUrlForSavingResult(),
             data: $scope.getPostDataForSavingResult(),
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        }).success(function (data, status, headers, config) {
-        }).error(function (data, status, headers, config) {
+        }).success(function () {
+        }).error(function (data, status) {
             alert('Leider ist ein Fehler aufgetreten. (Fehlercode: ' + status + ')');
         });
     };
