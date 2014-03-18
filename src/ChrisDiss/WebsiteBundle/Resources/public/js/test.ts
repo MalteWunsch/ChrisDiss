@@ -13,7 +13,7 @@ function TestCtrl($scope, $timeout, $http) {
      *
      * @type {number}
      */
-    $scope.numberOfNoAnswersBeforeNotice = 3;
+    $scope.numberOfNoAnswersBeforeTooSlowNotice = 3;
 
     /**
      * Number of wrong answers (marked and unmarked) after which the real test run terminates.
@@ -96,8 +96,10 @@ function TestCtrl($scope, $timeout, $http) {
         answerEvaluation = $scope.baseController.getAnswerEvaluation();
         $scope.testResult.add(answerEvaluation);
 
-        // letzte answer no answer und y no answers schon da
-        if (answerEvaluation instanceof NoAnswerEvaluation && this.testResult.getNumberOfNoAnswers() > this.numberOfNoAnswersBeforeNotice) {
+        // if user was too slow and has already missed numberOfNoAnswersBeforeTooSlowNotice questions, display notice
+        if (answerEvaluation instanceof NoAnswerEvaluation
+            && this.testResult.getNumberOfNoAnswers() > this.numberOfNoAnswersBeforeTooSlowNotice
+        ) {
             $scope.baseController.displayAnswerEvaluation($timeout, 0);
             delayForDisplayingEvaluation += $scope.baseController.durationOfAnswerEvaluationInMilliseconds;
         }
