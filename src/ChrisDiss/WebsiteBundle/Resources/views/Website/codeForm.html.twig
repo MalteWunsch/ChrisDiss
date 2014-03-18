@@ -11,12 +11,11 @@
 
     {{ form_start(form, {'attr': {'class': 'form-inline'}}) }}
         {% if (form.vars.valid == false) %}
-            <div class="errors">
-                Sie haben leider einen ungültigen Code eingegeben. Bitte versuchen Sie es erneut.
+            <div class="alert alert-danger">
+                Dieser Code war ungültig. Bitte versuchen Sie es erneut.
             </div>
         {% endif %}
 
-        {{ form_errors(form.code) }}
         {{ form_widget(form.code, {'attr': {'class': 'form-control input-lg', 'placeholder': 'Code'}}) }}
 
         {{ form_widget(form.save, {'attr': {'class': 'btn btn-lg btn-primary'}}) }}
