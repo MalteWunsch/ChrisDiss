@@ -14,12 +14,12 @@
         {% if ngController is defined %}ng-controller="{{ ngController }}"{% endif %}
         {% if ngKeypress is defined %}ng-keypress="{{ ngKeypress }}"{% endif %}
     >
-        {% if heading is defined %}
-            <h1>{{ heading }}</h1>
-        {% endif %}
-
         {% block body %}
             <div class="content">
+                {% if heading is defined %}
+                    <h1>{{ heading }}</h1>
+                {% endif %}
+
                 {% block content %}{% endblock %}
             </div>
         {% endblock %}
