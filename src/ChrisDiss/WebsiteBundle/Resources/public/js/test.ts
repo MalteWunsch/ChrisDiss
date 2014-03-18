@@ -23,11 +23,18 @@ function TestCtrl($scope, $timeout, $http) {
     $scope.enoughWrongAnswersGiven = 20;
 
     /**
+     * Maximum number of Questions the user can anser in the test, if no other exit condition occurs earlier.
+     *
+     * @type {number}
+     */
+    $scope.maxNumberOfQuestionsInTest = 100;
+
+    /**
      * Base controller with extracted commonalities between the dryRun- and test-Controller,
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController(100, 2000, 200, 1100, 3000, 80);
+    $scope.baseController = new BaseController($scope.maxNumberOfQuestionsInTest, 2000, 200, 1100, 3000, 80);
 
     /**
      * Aggregation of the AnswerEvaluations.
@@ -89,7 +96,9 @@ function TestCtrl($scope, $timeout, $http) {
         var delayForDisplayingEvaluation = 0,
             answerEvaluation;
 
-        if ($scope.baseController.currentQuestionNumber === 1) {
+        if ($scope.baseController.currentQuestionNumber === 1
+            || $scope.baseController.currentQuestionNumber > $scope.maxNumberOfQuestionsInTest
+        ) {
             return delayForDisplayingEvaluation;
         }
 

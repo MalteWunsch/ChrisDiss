@@ -66,7 +66,7 @@ function DryRunCtrl($scope, $timeout) {
     * @returns {number} delay for displaying the answer evaluation in milliseconds.
     */
     $scope.manageAnswerEvaluation = function () {
-        if ($scope.baseController.currentQuestionNumber === 1) {
+        if ($scope.baseController.currentQuestionNumber === 1 || $scope.baseController.currentQuestionNumber > $scope.questionsForDryRun.length) {
             return 0;
         }
 
