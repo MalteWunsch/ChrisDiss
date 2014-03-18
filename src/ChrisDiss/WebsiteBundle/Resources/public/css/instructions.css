@@ -2,6 +2,28 @@
     color: #f00;
 }
 
+div.blood-tube, div.tube-box {
+    font-size: 25px;
+}
+
+div.blood-tube {
+    width: 227px;
+    height: 65px;
+    background-image: url('../images/blood-tube-small.gif');
+    padding-top: 14px;
+}
+
+div.tube-box {
+    width: 185px;
+    height: 45px;
+    border: 6px solid #fff;
+    border-bottom: none;
+
+    padding-top: 6px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
 div.image-keyboard {
     width: 354px;
     height: 82px;
