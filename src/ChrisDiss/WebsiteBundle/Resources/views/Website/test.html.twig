@@ -2,7 +2,7 @@
 
 {% set bodyid = 'test' %}
 {% set ngController = 'TestCtrl' %}
-{% set ngKeypress = 'baseController.handleUserInput($event)' %}
+{% set ngKeypress = 'baseController.handleUserInput($event, $scope)' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -57,10 +57,7 @@
     <div id="errorDetectionNotice">
         Bei Vertippen: Leertaste
     </div>
-    <div id="lockedAnswer" class="key">
-        {{ '{{baseController.answer.getLetter()}}' }}
-    </div>
-    <div id="answerMarkedErroneous" class="key">
-        &nbsp;
-    </div>
+    <div id="locked-y" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.getLetter() === 'Y'">Y</div>
+    <div id="locked-error-marker" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.isMarkedAsErroneous()">&nbsp;</div>
+    <div id="locked-n" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.getLetter() === 'N'">N</div>
 {% endblock %}

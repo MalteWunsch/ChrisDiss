@@ -35,12 +35,26 @@ div.key {
     color: #000000;
 }
 
-div#answerMarkedErroneous {
-    left: 120px;
+#question, .tube-box, #answerEvaluation {
+    display: none;
 }
 
-#question, #lockedAnswer, .tube-box, #errorDetectionNotice, #answerMarkedErroneous, #answerEvaluation {
-    display: none;
+#locked-y, #locked-n, #locked-error-marker {
+    position:absolute;
+}
+
+#locked-y {
+    left: 10px;
+}
+
+#locked-n {
+    right: 10px;
+}
+
+#locked-error-marker {
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
 }
 
 #userFocusMarker {

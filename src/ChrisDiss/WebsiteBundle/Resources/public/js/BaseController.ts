@@ -195,13 +195,13 @@ class BaseController {
     public displayTubeBox($timeout, timeIndex: number) {
         $timeout(
             function () {
-                $('.tube-box, #errorDetectionNotice').show();
+                $('.tube-box').show();
             },
             timeIndex
         );
         $timeout(
             function () {
-                $('#question, .tube-box, #errorDetectionNotice, #lockedAnswer, #answerMarkedErroneous').hide();
+                $('#question, .tube-box').hide();
             },
             timeIndex + this.durationOfUserInputListeningInMilliseconds
         );
@@ -281,12 +281,22 @@ class BaseController {
             if (this.answer === null) {
                 if (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo()) {
                     this.answer = new Answer(lowerCaseChar);
-                    $('#lockedAnswer').show();
                 }
             } else if (lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
                 this.answer.markAsErroneous();
-                $('#answerMarkedErroneous').show();
             }
         }
+    }
+
+    /**
+     * Get whether an answer can be entered now.
+     *
+     * This delegationb method is used in the views, as angular expressions cannot query the static
+     * Answer.getCanBeEnteredNow() by themselves.
+     *
+     * @returns {boolean}
+     */
+    public answerCanBeEnteredNow() {
+        return Answer.getCanBeEnteredNow();
     }
 }
