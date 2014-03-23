@@ -23,7 +23,7 @@ function TestCtrl($scope, $timeout, $http) {
     $scope.enoughWrongAnswersGiven = 20;
 
     /**
-     * Maximum number of Questions the user can anser in the test, if no other exit condition occurs earlier.
+     * Maximum number of Questions the user can answer in the test, if no other exit condition occurs earlier.
      *
      * @type {number}
      */
