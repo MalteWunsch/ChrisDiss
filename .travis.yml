@@ -8,10 +8,10 @@ php:
   - hhvm
 
 before_script:
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
     - curl -s http://getcomposer.org/installer | php
     - php composer.phar install --dev
     - mkdir -p build/logs
-    - cp app/config/parameters.yml.dist app/config/parameters.yml
 
 script:
     - phpunit --coverage-clover build/logs/clover.xml
