@@ -2,6 +2,7 @@ div#endOfQuestions {
     display:none;
     width: 650px;
     margin:auto;
+    font-size: 18px;
 }
 
 div.verticalCenterWrapper {
