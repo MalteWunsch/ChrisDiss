@@ -25,6 +25,20 @@ class ColourFactory
     }
 
     /**
+     * Get a random colour, but exclude the excludedColour.
+     *
+     * @param excludedColour
+     * @returns {Colour}
+     */
+    public static getRandomColourButNot(excludedColours : Colour[]) {
+        var randomColour = ColourFactory.getRandomColour();
+        while ($.inArray(randomColour, excludedColours) !== -1) {
+            randomColour = ColourFactory.getRandomColour();
+        }
+        return randomColour;
+    }
+
+    /**
      * Get two distinct Colours.
      *
      * @returns {Colour[]}

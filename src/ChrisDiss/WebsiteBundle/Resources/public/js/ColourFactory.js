@@ -15,6 +15,20 @@ var ColourFactory = (function () {
     };
 
     /**
+    * Get a random colour, but exclude the excludedColour.
+    *
+    * @param excludedColour
+    * @returns {Colour}
+    */
+    ColourFactory.getRandomColourButNot = function (excludedColours) {
+        var randomColour = ColourFactory.getRandomColour();
+        while ($.inArray(randomColour, excludedColours) !== -1) {
+            randomColour = ColourFactory.getRandomColour();
+        }
+        return randomColour;
+    };
+
+    /**
     * Get two distinct Colours.
     *
     * @returns {Colour[]}
