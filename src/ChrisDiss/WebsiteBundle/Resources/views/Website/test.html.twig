@@ -54,7 +54,7 @@
             </p>
         </div>
     </div>
-    <div id="errorDetectionNotice">
+    <div id="errorDetectionNotice" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.isMarkedAsErroneous() !== true">
         Bei Vertippen: Leertaste
     </div>
     <div id="locked-y" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.getLetter() === 'Y'">Y</div>
