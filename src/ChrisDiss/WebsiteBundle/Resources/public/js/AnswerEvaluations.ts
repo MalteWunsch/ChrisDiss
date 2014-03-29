@@ -45,7 +45,7 @@ class NoAnswerEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Bitte antworten Sie noch etwas schneller.');
+        super('Bitte antworten Sie etwas schneller.');
     }
 }
 

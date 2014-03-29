@@ -47,7 +47,7 @@ var NoAnswerEvaluation = (function (_super) {
     * Constructor.
     */
     function NoAnswerEvaluation() {
-        _super.call(this, 'Bitte antworten Sie noch etwas schneller.');
+        _super.call(this, 'Bitte antworten Sie etwas schneller.');
     }
     return NoAnswerEvaluation;
 })(AnswerEvaluation);
