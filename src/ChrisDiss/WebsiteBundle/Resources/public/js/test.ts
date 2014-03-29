@@ -51,7 +51,7 @@ function TestCtrl($scope, $timeout, $http) {
 
         if ($scope.quizShouldEnd() === true) {
             $scope.saveResult();
-            $scope.baseController.manageEndOfQuestions();
+            $scope.baseController.manageEndOfQuestions($timeout, delayForDisplayingEvaluation);
         } else {
             $scope.baseController.manageNextQuestion(
                 $timeout,

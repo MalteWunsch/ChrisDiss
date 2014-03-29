@@ -262,9 +262,17 @@ class BaseController {
 
     /**
      * Manage the end after the user has answered all Questions.
+     *
+     * @param $timeout AngularJS timeout function to delay execution of a function.
+     * @param timeIndex delay for the $timeout in milliseconds.
      */
-    public manageEndOfQuestions() {
-        $('#endOfQuestions').show();
+    public manageEndOfQuestions($timeout, timeIndex: number) {
+        $timeout(
+            function () {
+                $('#endOfQuestions').show();
+            },
+            timeIndex
+        );
     }
 
     /**

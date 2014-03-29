@@ -39,7 +39,7 @@ function DryRunCtrl($scope, $timeout) {
         var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation();
 
         if ($scope.quizShouldEnd() === true) {
-            $scope.baseController.manageEndOfQuestions();
+            $scope.baseController.manageEndOfQuestions($timeout, delayForDisplayingEvaluation);
         } else {
             $scope.baseController.manageNextQuestion(
                 $timeout,
@@ -76,7 +76,7 @@ function DryRunCtrl($scope, $timeout) {
      */
     $scope.manageAnswerEvaluation = function () {
         if ($scope.baseController.currentQuestionNumber === 1
-            || $scope.baseController.currentQuestionNumber > $scope.questionsForDryRun.length
+            || $scope.baseController.currentQuestionNumber > ($scope.questionsForDryRun.length + 1)
         ) {
             return 0;
         }

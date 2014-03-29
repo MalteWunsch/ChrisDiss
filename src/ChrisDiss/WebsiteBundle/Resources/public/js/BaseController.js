@@ -173,9 +173,14 @@ var BaseController = (function () {
 
     /**
     * Manage the end after the user has answered all Questions.
+    *
+    * @param $timeout AngularJS timeout function to delay execution of a function.
+    * @param timeIndex delay for the $timeout in milliseconds.
     */
-    BaseController.prototype.manageEndOfQuestions = function () {
-        $('#endOfQuestions').show();
+    BaseController.prototype.manageEndOfQuestions = function ($timeout, timeIndex) {
+        $timeout(function () {
+            $('#endOfQuestions').show();
+        }, timeIndex);
     };
 
     /**
