@@ -13,8 +13,6 @@ var Question = (function () {
     * @param colourForBox Colour of which the name is used as a label for the tube box.
     */
     function Question(colourForName, colourForHex, colourForBox) {
-        var headsOrTails;
-
         this.colourForName = colourForName;
         this.colourForHex = colourForHex;
         this.colourForBox = colourForBox;
@@ -44,7 +42,7 @@ var Question = (function () {
     * Gets the correct answer for this question, i.e. whether the Colour for the hex code is the same (caution: in
     * terms of identity, not equality) as the one used for the tube box.
     *
-    * @returns {bool}
+    * @returns {boolean}
     */
     Question.prototype.getCorrectAnswer = function () {
         return this.colourForHex === this.colourForBox;

@@ -29,8 +29,6 @@ class Question {
      * @param colourForBox Colour of which the name is used as a label for the tube box.
      */
     constructor(colourForName: Colour, colourForHex: Colour, colourForBox: Colour) {
-        var headsOrTails;
-
         this.colourForName = colourForName;
         this.colourForHex = colourForHex;
         this.colourForBox = colourForBox;
@@ -61,7 +59,7 @@ class Question {
      * Gets the correct answer for this question, i.e. whether the Colour for the hex code is the same (caution: in
      * terms of identity, not equality) as the one used for the tube box.
      *
-     * @returns {bool}
+     * @returns {boolean}
      */
     public getCorrectAnswer() {
         return this.colourForHex === this.colourForBox;
