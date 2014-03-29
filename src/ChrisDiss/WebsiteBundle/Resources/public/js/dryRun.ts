@@ -95,4 +95,5 @@ function DryRunCtrl($scope, $timeout) {
     };
 
     $scope.manageQuiz();
+    $('.hideAtFirstWhereNgCloakIsNotWorking').show();
 }

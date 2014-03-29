@@ -160,5 +160,6 @@ function TestCtrl($scope, $timeout, $http) {
     };
 
     $scope.manageQuiz();
+    $('.hideAtFirstWhereNgCloakIsNotWorking').show();
 }
 //# sourceMappingURL=test.js.map

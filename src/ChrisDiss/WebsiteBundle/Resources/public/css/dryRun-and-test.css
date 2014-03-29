@@ -39,6 +39,10 @@ div.key {
     display: none;
 }
 
+.hideAtFirstWhereNgCloakIsNotWorking {
+    display: none;
+}
+
 #locked-y, #locked-n, #locked-error-marker {
     position:absolute;
 }

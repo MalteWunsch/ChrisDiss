@@ -181,4 +181,5 @@ function TestCtrl($scope, $timeout, $http) {
     };
 
     $scope.manageQuiz();
+    $('.hideAtFirstWhereNgCloakIsNotWorking').show();
 }

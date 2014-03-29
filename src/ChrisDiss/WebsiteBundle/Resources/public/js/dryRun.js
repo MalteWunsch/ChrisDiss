@@ -84,5 +84,6 @@ function DryRunCtrl($scope, $timeout) {
     };
 
     $scope.manageQuiz();
+    $('.hideAtFirstWhereNgCloakIsNotWorking').show();
 }
 //# sourceMappingURL=dryRun.js.map
