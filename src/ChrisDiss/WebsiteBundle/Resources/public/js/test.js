@@ -33,7 +33,7 @@ function TestCtrl($scope, $timeout, $http) {
     *
     * @type {BaseController}
     */
-    $scope.baseController = new BaseController($scope.maxNumberOfQuestionsInTest, 2000, 200, 1100, 3000, 80);
+    $scope.baseController = new BaseController($scope.maxNumberOfQuestionsInTest, 2000, 200, 2000, 3000, 80);
 
     /**
     * Aggregation of the AnswerEvaluations.
