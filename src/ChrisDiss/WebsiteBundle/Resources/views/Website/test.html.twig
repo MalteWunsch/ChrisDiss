@@ -35,7 +35,7 @@
         </div>
         <div id="question">
             <div class="blood-tube">
-                <span style="color:#{{ '{{baseController.question.getColourHex()}}' }};">{{ '{{baseController.question.getColourName()}}' }}</span>
+                <span ng-style="{color:baseController.question.getColourHex()}">{{ '{{baseController.question.getColourName()}}' }}</span>
             </div>
             <div class="tube-box">
                 {{ '{{baseController.question.getBoxColourName()}}' }}
