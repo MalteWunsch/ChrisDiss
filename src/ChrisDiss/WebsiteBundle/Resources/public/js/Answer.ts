@@ -15,6 +15,13 @@ class Answer {
     private static canBeEnteredNow: boolean;
 
     /**
+     * Whether an answer can be marked as incorrect now.
+     *
+     * @type {boolean}
+     */
+    private static canBeMarkedNow: boolean;
+
+    /**
      * Locked lower cased letter of the key the user has pressed.
      *
      * @type {string}
@@ -73,6 +80,24 @@ class Answer {
      */
     public static setCanBeEnteredNow(canBeEntered: boolean) {
         this.canBeEnteredNow = canBeEntered;
+    }
+
+    /**
+     * Get whether an answers can be marked as incorrect now.
+     *
+     * @returns {bool}
+     */
+    public static getCanBeMarkedNow() {
+        return (this.canBeMarkedNow === true);
+    }
+
+    /**
+     * Set whether answers can be marked as incorrect now.
+     *
+     * @param canBeMarked
+     */
+    public static setCanBeMarkedNow(canBeMarked: boolean) {
+        this.canBeMarkedNow = canBeMarked;
     }
 
     /**

@@ -36,10 +36,15 @@ class BaseController {
     public delayBeforeTubeBoxInMilliseconds: number;
 
     /**
-     * Constant duration in milliseconds for listening to user input after both the blood tube and the tube box have
-     * been displayed.
+     * Duration in milliseconds for listening to user input for an answer key after both the blood tube and the tube box
+     * have been displayed. Can be cut short if the user answers before the end of this duration.
      */
-    public durationOfUserInputListeningInMilliseconds: number;
+    public durationOfAnswerListeningInMilliseconds: number;
+
+    /**
+     * Constant duration in milliseconds for listening to user input for marking a previously given answer as incorrect.
+     */
+    public durationOfAnswerMarkListeningInMilliseconds: number;
 
     /**
      * Constant duration in milliseconds the evaluation of the user's answer is displayed.
@@ -69,8 +74,11 @@ class BaseController {
      * between Questions to allow a user to regenerate their concentration. After that, the blood tube is displayed.
      * @param delayBeforeTubeBoxInMilliseconds Constant delay in milliseconds before displaying the tube box after the
      * blood tube.
-     * @param durationOfUserInputListeningInMilliseconds Constant duration in milliseconds for listening to user input
-     * after both the blood tube and the tube box have been displayed.
+     * @param durationOfAnswerListeningInMilliseconds Duration in milliseconds for listening to user input for an answer
+     * key after both the blood tube and the tube box have been displayed. Can be cut short if the user answers before
+     * the end of this duration.
+     * @param durationOfAnswerMarkListeningInMilliseconds Constant duration in milliseconds for listening to user input
+     * for marking a previously given answer as incorrect.
      * @param durationOfAnswerEvaluationInMilliseconds Constant duration in milliseconds the evaluation of the user's
      * answer is displayed.
      * @param percentageOfStroopQuestions Constant percentage of chance that a Question is a Stroop one.
@@ -79,7 +87,8 @@ class BaseController {
         numberOfQuestions: number,
         durationOfFocusMarkInMilliseconds: number,
         delayBeforeTubeBoxInMilliseconds: number,
-        durationOfUserInputListeningInMilliseconds: number,
+        durationOfAnswerListeningInMilliseconds: number,
+        durationOfAnswerMarkListeningInMilliseconds: number,
         durationOfAnswerEvaluationInMilliseconds: number,
         percentageOfStroopQuestions: number
     ) {
@@ -87,7 +96,8 @@ class BaseController {
         this.currentQuestionNumber = 1;
         this.durationOfFocusMarkInMilliseconds = durationOfFocusMarkInMilliseconds;
         this.delayBeforeTubeBoxInMilliseconds = delayBeforeTubeBoxInMilliseconds;
-        this.durationOfUserInputListeningInMilliseconds = durationOfUserInputListeningInMilliseconds;
+        this.durationOfAnswerListeningInMilliseconds = durationOfAnswerListeningInMilliseconds;
+        this.durationOfAnswerMarkListeningInMilliseconds = durationOfAnswerMarkListeningInMilliseconds;
         this.durationOfAnswerEvaluationInMilliseconds = durationOfAnswerEvaluationInMilliseconds;
         this.percentageOfStroopQuestions = percentageOfStroopQuestions
     }
@@ -111,7 +121,7 @@ class BaseController {
         this.allowUserInput($timeout, timeIndex);
         this.displayTubeBox($timeout, timeIndex);
 
-        timeIndex += this.durationOfUserInputListeningInMilliseconds;
+        timeIndex += this.durationOfAnswerListeningInMilliseconds + this.durationOfAnswerMarkListeningInMilliseconds;
         this.setNextManagement($timeout, timeIndex, $scope);
     }
 
@@ -140,8 +150,8 @@ class BaseController {
 
     /**
      * Starting at the timeIndex after the focus mark, the screen is blank. Display the blood tube as one part of the
-     * Question for delayBeforeTubeBoxInMilliseconds + durationOfUserInputListeningInMilliseconds. After that, the blood
-     * tube is hidden.
+     * Question for delayBeforeTubeBoxInMilliseconds + durationOfAnswerListeningInMilliseconds
+     * + durationOfAnswerMarkListeningInMilliseconds milliseconds. After that, the blood tube is hidden.
      *
      * @param $timeout AngularJS timeout function to delay execution of a function.
      * @param timeIndex delay for the $timeout in milliseconds.
@@ -157,13 +167,18 @@ class BaseController {
             function () {
                 $('#question').hide();
             },
-            timeIndex + this.delayBeforeTubeBoxInMilliseconds + this.durationOfUserInputListeningInMilliseconds
+            (timeIndex
+                + this.delayBeforeTubeBoxInMilliseconds
+                + this.durationOfAnswerListeningInMilliseconds
+                + this.durationOfAnswerMarkListeningInMilliseconds
+            )
         );
     }
 
     /**
      * Starting at the timeIndex after the blood tube + delayBeforeTubeBoxInMilliseconds, allow user input for answering
-     * the Question for durationOfUserInputListeningInMilliseconds. After that, user input is disabled.
+     * the Question for durationOfAnswerListeningInMilliseconds. After that, user input for marking the answer is
+     * allowed for durationOfMarkListeningInMilliseconds, amd after that, all input is disabled.
      *
      * @param $timeout AngularJS timeout function to delay execution of a function.
      * @param timeIndex delay for the $timeout in milliseconds.
@@ -178,16 +193,24 @@ class BaseController {
         $timeout(
             function () {
                 Answer.setCanBeEnteredNow(false);
+                Answer.setCanBeMarkedNow(true);
             },
-            timeIndex + this.durationOfUserInputListeningInMilliseconds
+            timeIndex + this.durationOfAnswerListeningInMilliseconds
+        );
+        $timeout(
+            function () {
+                Answer.setCanBeMarkedNow(false);
+            },
+            timeIndex + this.durationOfAnswerListeningInMilliseconds + this.durationOfAnswerMarkListeningInMilliseconds
         );
     }
 
     /**
      * Starting at the timeIndex after the blood tube + delayBeforeTubeBoxInMilliseconds, the screen show the blood
      * tube. Display the tube box (and error detection notice) as the second and final part of the Question for
-     * delayBeforeTubeBoxInMilliseconds + durationOfUserInputListeningInMilliseconds. After that, the tube box, error
-     * detection notice and a possible answer are hidden.
+     * delayBeforeTubeBoxInMilliseconds + durationOfAnswerListeningInMilliseconds
+     * + durationOfAnswerMarkListeningInMilliseconds milliseconds. After that, the tube box, error detection notice and
+     * a possible answer are hidden.
      *
      * @param $timeout AngularJS timeout function to delay execution of a function.
      * @param timeIndex delay for the $timeout in milliseconds.
@@ -203,7 +226,7 @@ class BaseController {
             function () {
                 $('#question, .tube-box').hide();
             },
-            timeIndex + this.durationOfUserInputListeningInMilliseconds
+            timeIndex + this.durationOfAnswerListeningInMilliseconds + this.durationOfAnswerMarkListeningInMilliseconds
         );
     }
 
@@ -285,14 +308,16 @@ class BaseController {
             KeyCodeHelper.shiftKeyCodeToLowerCasedLetterIfApplicable(event.which)
         );
 
-        if (Answer.getCanBeEnteredNow() === true) {
-            if (this.answer === null) {
-                if (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo()) {
-                    this.answer = new Answer(lowerCaseChar);
-                }
-            } else if (lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
-                this.answer.markAsErroneous();
-            }
+        if (Answer.getCanBeEnteredNow() === true
+            && this.answer === null
+            && (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo())
+        ) {
+            this.answer = new Answer(lowerCaseChar);
+            Answer.setCanBeMarkedNow(true);
+        } else if (Answer.getCanBeMarkedNow() === true
+            && lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()
+        ) {
+            this.answer.markAsErroneous();
         }
     }
 

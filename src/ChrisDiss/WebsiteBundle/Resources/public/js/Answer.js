@@ -72,6 +72,24 @@ var Answer = (function () {
     };
 
     /**
+    * Get whether an answers can be marked as incorrect now.
+    *
+    * @returns {bool}
+    */
+    Answer.getCanBeMarkedNow = function () {
+        return (this.canBeMarkedNow === true);
+    };
+
+    /**
+    * Set whether answers can be marked as incorrect now.
+    *
+    * @param canBeMarked
+    */
+    Answer.setCanBeMarkedNow = function (canBeMarked) {
+        this.canBeMarkedNow = canBeMarked;
+    };
+
+    /**
     * Get the lower cased letter of the key the user has pressed.
     *
     * @returns {string}
