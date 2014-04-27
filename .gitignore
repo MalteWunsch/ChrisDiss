@@ -13,3 +13,6 @@
 
 # IDEs
 /.idea/
+
+# application instance specifics
+/web/ergebnisse.html
