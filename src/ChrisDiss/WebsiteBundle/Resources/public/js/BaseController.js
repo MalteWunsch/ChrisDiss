@@ -205,7 +205,7 @@ var BaseController = (function () {
             this.answer = new Answer(lowerCaseChar);
             Answer.setCanBeEnteredNow(false);
             Answer.setCanBeMarkedNow(true);
-        } else if (Answer.getCanBeMarkedNow() === true && lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
+        } else if (Answer.getCanBeMarkedNow() === true && this.answer !== null && lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
             this.answer.markAsErroneous();
         }
     };

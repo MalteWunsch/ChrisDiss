@@ -316,6 +316,7 @@ class BaseController {
             Answer.setCanBeEnteredNow(false);
             Answer.setCanBeMarkedNow(true);
         } else if (Answer.getCanBeMarkedNow() === true
+            && this.answer !== null
             && lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()
         ) {
             this.answer.markAsErroneous();
