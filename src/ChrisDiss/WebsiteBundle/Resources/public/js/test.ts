@@ -89,9 +89,7 @@ function TestCtrl($scope, $timeout, $http) {
         var delayForDisplayingEvaluation = 0,
             answerEvaluation;
 
-        if ($scope.baseController.currentQuestionNumber === 1
-            || $scope.baseController.currentQuestionNumber > $scope.maxNumberOfQuestionsInTest
-        ) {
+        if ($scope.baseController.currentQuestionNumber === 1) {
             return delayForDisplayingEvaluation;
         }
 
@@ -101,6 +99,7 @@ function TestCtrl($scope, $timeout, $http) {
         // if user was too slow and has already missed numberOfNoAnswersBeforeTooSlowNotice questions, display notice
         if (answerEvaluation instanceof NoAnswerEvaluation
             && this.testResult.getNumberOfNoAnswers() > this.numberOfNoAnswersBeforeTooSlowNotice
+            && $scope.baseController.currentQuestionNumber <= $scope.maxNumberOfQuestionsInTest
         ) {
             $scope.baseController.displayAnswerEvaluation($timeout, 0);
             delayForDisplayingEvaluation += $scope.baseController.durationOfAnswerEvaluationInMilliseconds;
