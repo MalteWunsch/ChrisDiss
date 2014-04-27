@@ -313,6 +313,7 @@ class BaseController {
             && (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo())
         ) {
             this.answer = new Answer(lowerCaseChar);
+            Answer.setCanBeEnteredNow(false);
             Answer.setCanBeMarkedNow(true);
         } else if (Answer.getCanBeMarkedNow() === true
             && lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()
@@ -331,6 +332,18 @@ class BaseController {
      */
     public answerCanBeEnteredNow() {
         return Answer.getCanBeEnteredNow();
+    }
+
+    /**
+     * Get whether an answer can be marked as incorrect now.
+     *
+     * This delegation method is used in the views, as angular expressions cannot query the static
+     * Answer.getCanBeMarkedNow() by themselves.
+     *
+     * @returns {boolean}
+     */
+    public answerCanBeMarkedNow() {
+        return Answer.getCanBeMarkedNow();
     }
 
     /**

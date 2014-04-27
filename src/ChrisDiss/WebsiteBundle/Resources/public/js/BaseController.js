@@ -203,6 +203,7 @@ var BaseController = (function () {
 
         if (Answer.getCanBeEnteredNow() === true && this.answer === null && (lowerCaseChar === Answer.getCharacterForYes() || lowerCaseChar === Answer.getCharacterForNo())) {
             this.answer = new Answer(lowerCaseChar);
+            Answer.setCanBeEnteredNow(false);
             Answer.setCanBeMarkedNow(true);
         } else if (Answer.getCanBeMarkedNow() === true && lowerCaseChar === Answer.getCharacterForMarkingAnswerAsErroneous()) {
             this.answer.markAsErroneous();
@@ -219,6 +220,18 @@ var BaseController = (function () {
     */
     BaseController.prototype.answerCanBeEnteredNow = function () {
         return Answer.getCanBeEnteredNow();
+    };
+
+    /**
+    * Get whether an answer can be marked as incorrect now.
+    *
+    * This delegation method is used in the views, as angular expressions cannot query the static
+    * Answer.getCanBeMarkedNow() by themselves.
+    *
+    * @returns {boolean}
+    */
+    BaseController.prototype.answerCanBeMarkedNow = function () {
+        return Answer.getCanBeMarkedNow();
     };
 
     /**

@@ -55,11 +55,12 @@
         </div>
     </div>
     <div class="hideAtFirstWhereNgCloakIsNotWorking">
-        <div id="errorDetectionNotice" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.isMarkedAsErroneous() !== true">
-            Bei Vertippen: Leertaste
+        <div id="inputPhaseOrder">
+            <span ng-if="baseController.answerCanBeEnteredNow() === true">Eingabe Y/N</span>
+            <span ng-if="baseController.answerCanBeMarkedNow() && baseController.answer !== null && baseController.answer.isMarkedAsErroneous() !== true">Korrektur mit Leertaste?</span>
         </div>
-        <div id="locked-y" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.getLetter() === 'Y'">Y</div>
-        <div id="locked-error-marker" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.isMarkedAsErroneous()">&nbsp;</div>
-        <div id="locked-n" class="key" ng-show="baseController.answerCanBeEnteredNow() && baseController.answer.getLetter() === 'N'">N</div>
+        <div id="locked-y" class="key" ng-show="(baseController.answerCanBeEnteredNow() || baseController.answerCanBeMarkedNow()) && baseController.answer.getLetter() === 'Y'">Y</div>
+        <div id="locked-error-marker" class="key" ng-show="baseController.answerCanBeMarkedNow() && baseController.answer.isMarkedAsErroneous()">&nbsp;</div>
+        <div id="locked-n" class="key" ng-show="(baseController.answerCanBeEnteredNow() || baseController.answerCanBeMarkedNow()) && baseController.answer.getLetter() === 'N'">N</div>
     </div>
 {% endblock %}
