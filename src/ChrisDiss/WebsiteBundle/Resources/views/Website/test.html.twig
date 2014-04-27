@@ -33,7 +33,7 @@
         <div id="answerEvaluation">
             {{ '{{baseController.getAnswerEvaluation().getMessage()}}' }}
         </div>
-        <div id="question">
+        <div id="question" ng-hide="baseController.answerCanBeMarkedNow() === true && baseController.answer === null">
             <div class="blood-tube">
                 <span ng-style="{color:baseController.question.getColourHex()}">{{ '{{baseController.question.getColourName()}}' }}</span>
             </div>
