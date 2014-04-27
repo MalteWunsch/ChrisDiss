@@ -213,6 +213,15 @@ var BaseController = (function () {
     BaseController.prototype.answerCanBeEnteredNow = function () {
         return Answer.getCanBeEnteredNow();
     };
+
+    /**
+    * Get whether one of the termination conditions is met.
+    *
+    * @returns {boolean}
+    */
+    BaseController.prototype.quizShouldEnd = function () {
+        return this.currentQuestionNumber > this.numberOfQuestions;
+    };
     return BaseController;
 })();
 //# sourceMappingURL=BaseController.js.map

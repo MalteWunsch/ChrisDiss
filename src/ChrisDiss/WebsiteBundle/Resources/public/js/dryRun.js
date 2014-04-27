@@ -37,7 +37,7 @@ function DryRunCtrl($scope, $timeout) {
     $scope.manageQuiz = function () {
         var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation();
 
-        if ($scope.quizShouldEnd() === true) {
+        if ($scope.baseController.quizShouldEnd() === true) {
             $scope.baseController.manageEndOfQuestions($timeout, delayForDisplayingEvaluation);
         } else {
             $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope, $scope.setNextQuestion);
@@ -72,15 +72,6 @@ function DryRunCtrl($scope, $timeout) {
 
         $scope.baseController.displayAnswerEvaluation($timeout, 0);
         return $scope.baseController.durationOfAnswerEvaluationInMilliseconds;
-    };
-
-    /**
-    * Get whether one of the termination conditions is met.
-    *
-    * @returns {boolean}
-    */
-    $scope.quizShouldEnd = function () {
-        return $scope.baseController.currentQuestionNumber > $scope.baseController.numberOfQuestions;
     };
 
     $scope.manageQuiz();

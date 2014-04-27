@@ -307,4 +307,13 @@ class BaseController {
     public answerCanBeEnteredNow() {
         return Answer.getCanBeEnteredNow();
     }
+
+    /**
+     * Get whether one of the termination conditions is met.
+     *
+     * @returns {boolean}
+     */
+    public quizShouldEnd() {
+        return this.currentQuestionNumber > this.numberOfQuestions;
+    }
 }

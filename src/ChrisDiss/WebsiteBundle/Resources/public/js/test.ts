@@ -16,13 +16,6 @@ function TestCtrl($scope, $timeout, $http) {
     $scope.numberOfNoAnswersBeforeTooSlowNotice = 3;
 
     /**
-     * Number of wrong answers (marked and unmarked) after which the real test run terminates.
-     *
-     * @type {number}
-     */
-    $scope.enoughWrongAnswersGiven = 20;
-
-    /**
      * Maximum number of Questions the user can answer in the test, if no other exit condition occurs earlier.
      *
      * @type {number}
@@ -49,7 +42,7 @@ function TestCtrl($scope, $timeout, $http) {
     $scope.manageQuiz = function () {
         var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation();
 
-        if ($scope.quizShouldEnd() === true) {
+        if ($scope.baseController.quizShouldEnd() === true) {
             $scope.saveResult();
             $scope.baseController.manageEndOfQuestions($timeout, delayForDisplayingEvaluation);
         } else {
@@ -114,18 +107,6 @@ function TestCtrl($scope, $timeout, $http) {
         }
 
         return delayForDisplayingEvaluation;
-    };
-
-    /**
-     * Get whether one of the termination conditions is met.
-     *
-     * @returns {boolean}
-     */
-    $scope.quizShouldEnd = function () {
-        var allQuestionsAsked = $scope.baseController.currentQuestionNumber > $scope.baseController.numberOfQuestions,
-            enoughWrongAnswersGiven = $scope.testResult.getSumOfWrongAnswers() >= $scope.enoughWrongAnswersGiven;
-
-        return allQuestionsAsked || enoughWrongAnswersGiven;
     };
 
     /**
