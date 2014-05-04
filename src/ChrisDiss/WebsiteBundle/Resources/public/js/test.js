@@ -29,6 +29,20 @@ function TestCtrl($scope, $timeout, $http) {
     $scope.baseController = new BaseController($scope.maxNumberOfQuestionsInTest, 2000, 200, 1000, 1000, 3000, 80);
 
     /**
+    * Seconds the pause screen is displayed.
+    *
+    * @type {number}
+    */
+    $scope.pauseDuration = 30;
+
+    /**
+    * Remaining number of seconds for the current pause.
+    *
+    * @type {boolean}
+    */
+    $scope.pauseForXSeconds = 0;
+
+    /**
     * Aggregation of the AnswerEvaluations.
     *
     * @type {TestResult}
@@ -39,16 +53,47 @@ function TestCtrl($scope, $timeout, $http) {
     * Manage the quiz control flow.
     */
     $scope.manageQuiz = function () {
-        var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation();
+        var delayForDisplayingEvaluation = $scope.manageAnswerEvaluation(), delayForNextQuestion = delayForDisplayingEvaluation;
 
         if ($scope.baseController.quizShouldEnd() === true) {
             $scope.saveResult();
             $scope.baseController.manageEndOfQuestions($timeout, delayForDisplayingEvaluation);
         } else {
-            $scope.baseController.manageNextQuestion($timeout, delayForDisplayingEvaluation, $scope, $scope.setNextQuestion);
+            // inject pause
+            if ($scope.quizShouldPause() === true) {
+                delayForNextQuestion += $scope.pauseDuration * 1000;
+                $timeout(function () {
+                    $scope.pauseForXSeconds = $scope.pauseDuration;
+                    $scope.pauseCountdown();
+                }, delayForDisplayingEvaluation);
+            }
+
+            $scope.baseController.manageNextQuestion($timeout, delayForNextQuestion, $scope, $scope.setNextQuestion);
         }
     };
 
+    /**
+    * Get whether the quiz should be paused now.
+    *
+    * @returns {boolean}
+    */
+    $scope.quizShouldPause = function () {
+        return ($scope.baseController.currentQuestionNumber % 34 === 0);
+    };
+
+    /**
+    * Count the remaining pause down, one second each second.
+    */
+    $scope.pauseCountdown = function () {
+        $timeout(function () {
+            $scope.pauseForXSeconds--;
+            if ($scope.pauseForXSeconds > 0) {
+                $scope.pauseCountdown();
+            }
+        }, 1000);
+    };
+
+    // display pause - dann wieder fiese dom manipulation?
     /**
     * Starting at the timeIndex after the focus mark, set a new Question, with it randomly being a Stroop or a regular
     * one. That deletes the former answer.
