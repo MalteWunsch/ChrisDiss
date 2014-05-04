@@ -17,3 +17,7 @@ testung:
 saveResult:
     pattern:  /save-result
     defaults: { _controller: ChrisDissWebsiteBundle:Website:saveResult }
+
+anschlussfragebogen:
+    pattern: /fb
+    defaults: { _controller: ChrisDissWebsiteBundle:Website:anschlussFragebogen }

@@ -124,4 +124,12 @@ class WebsiteController extends Controller
 
         return new Response();
     }
+
+    /**
+     * Redirect the user to the part taking place after this application.
+     */
+    public function anschlussFragebogenAction()
+    {
+        return $this->redirect('https://umfrage.bibb.de/lime1/index.php?sid=15256&lang=de');
+    }
 }
