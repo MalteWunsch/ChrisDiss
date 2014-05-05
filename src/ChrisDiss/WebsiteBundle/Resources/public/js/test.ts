@@ -27,14 +27,14 @@ function TestCtrl($scope, $timeout, $http) {
      *
      * @type {BaseController}
      */
-    $scope.baseController = new BaseController($scope.maxNumberOfQuestionsInTest, 2000, 200, 1000, 1000, 3000, 80);
+    $scope.baseController = new BaseController($scope.maxNumberOfQuestionsInTest, 2000, 200, 900, 1000, 3000, 80);
 
     /**
      * Seconds the pause screen is displayed.
      *
      * @type {number}
      */
-    $scope.pauseDuration = 30;
+    $scope.pauseDuration = 15;
 
     /**
      * Remaining number of seconds for the current pause.
@@ -88,7 +88,7 @@ function TestCtrl($scope, $timeout, $http) {
      * @returns {boolean}
      */
     $scope.quizShouldPause = function() {
-        return ($scope.baseController.currentQuestionNumber % 34 === 0);
+        return ($scope.baseController.currentQuestionNumber % 21 === 0);
     };
 
     /**
