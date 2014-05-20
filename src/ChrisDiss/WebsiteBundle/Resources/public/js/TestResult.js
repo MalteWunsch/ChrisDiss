@@ -106,6 +106,17 @@ var TestResult = (function () {
     TestResult.prototype.getSumOfWrongAnswers = function () {
         return this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();
     };
+
+    /**
+    * Get a serializated string of all Answers.
+    *
+    * @returns {string}
+    */
+    TestResult.prototype.getAllAnswers = function () {
+        var allAnswers = [];
+        allAnswers = allAnswers.concat(this.markedWrongAnswers, this.unmarkedWrongAnswers, this.markedCorrectAnswers, this.unmarkedCorrectAnswers, this.noAnswers);
+        return JSON.stringify(allAnswers);
+    };
     return TestResult;
 })();
 //# sourceMappingURL=TestResult.js.map

@@ -109,4 +109,15 @@ class TestResult {
     public getSumOfWrongAnswers() {
         return this.getNumberOfMarkedWrongAnswers() + this.getNumberOfUnmarkedWrongAnswers();
     }
+
+    /**
+     * Get a serializated string of all Answers.
+     *
+     * @returns {string}
+     */
+    public getAllAnswers() {
+        var allAnswers: AnswerEvaluation[] = [];
+        allAnswers = allAnswers.concat(this.markedWrongAnswers, this.unmarkedWrongAnswers, this.markedCorrectAnswers, this.unmarkedCorrectAnswers, this.noAnswers);
+        return JSON.stringify(allAnswers);
+    }
 }

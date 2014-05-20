@@ -8,12 +8,25 @@ class AnswerEvaluation {
     private message: string;
 
     /**
+     * Creation date of this evaluation.
+     */
+    private createdAt: Date;
+
+    /**
+     * Name of the evaluation type, e.g. 'NoAnswer'.
+     */
+    private type: string;
+
+    /**
      * Constructor.
      *
      * @param message Human readable message for this evaluation.
+     * @param type Name of the evaluation type, e.g. 'NoAnswer'.
      */
-    constructor(message: string) {
+    constructor(message: string, type: string) {
         this.setMessage(message);
+        this.setType(type);
+        this.createdAt = new Date();
     }
 
     /**
@@ -35,6 +48,17 @@ class AnswerEvaluation {
         this.message = message;
         return this;
     }
+
+    /**
+     * Set the name of the evaluation type, e.g. 'NoAnswer'.
+     *
+     * @param type
+     * @returns {AnswerEvaluation} fluent interface
+     */
+    public setType(type: string) {
+        this.type = type;
+        return this;
+    }
 }
 
 /**
@@ -45,7 +69,7 @@ class NoAnswerEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Bitte antworten Sie etwas schneller.');
+        super('Bitte antworten Sie etwas schneller.', 'NoAnswer');
     }
 }
 
@@ -57,7 +81,7 @@ class CorrectAnswerEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Gut: Ihre Antwort war richtig.');
+        super('Gut: Ihre Antwort war richtig.', 'UnmarkedCorrectAnswer');
     }
 }
 
@@ -69,7 +93,7 @@ class WrongAnswerEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Ihre Antwort war falsch.');
+        super('Ihre Antwort war falsch.', 'UnmarkedWrongAnswer');
     }
 }
 
@@ -81,7 +105,7 @@ class CorrectlyMarkedAnswerAsWrongEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Gut: Sie haben bemerkt, dass Sie die falsche Antwort gegeben hatten.');
+        super('Gut: Sie haben bemerkt, dass Sie die falsche Antwort gegeben hatten.', 'MarkedWrongAnswer');
     }
 }
 
@@ -93,6 +117,6 @@ class WronglyMarkedAnswerAsWrongEvaluation extends AnswerEvaluation {
      * Constructor.
      */
     constructor() {
-        super('Sie haben Ihre eigentlich richtige Antwort leider als Vertipper markiert.');
+        super('Sie haben Ihre eigentlich richtige Antwort leider als Vertipper markiert.', 'MarkedCorrectAnswer');
     }
 }

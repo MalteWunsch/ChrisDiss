@@ -12,9 +12,12 @@ var AnswerEvaluation = (function () {
     * Constructor.
     *
     * @param message Human readable message for this evaluation.
+    * @param type Name of the evaluation type, e.g. 'NoAnswer'.
     */
-    function AnswerEvaluation(message) {
+    function AnswerEvaluation(message, type) {
         this.setMessage(message);
+        this.setType(type);
+        this.createdAt = new Date();
     }
     /**
     * Get the human readable message for this evaluation.
@@ -35,6 +38,17 @@ var AnswerEvaluation = (function () {
         this.message = message;
         return this;
     };
+
+    /**
+    * Set the name of the evaluation type, e.g. 'NoAnswer'.
+    *
+    * @param type
+    * @returns {AnswerEvaluation} fluent interface
+    */
+    AnswerEvaluation.prototype.setType = function (type) {
+        this.type = type;
+        return this;
+    };
     return AnswerEvaluation;
 })();
 
@@ -47,7 +61,7 @@ var NoAnswerEvaluation = (function (_super) {
     * Constructor.
     */
     function NoAnswerEvaluation() {
-        _super.call(this, 'Bitte antworten Sie etwas schneller.');
+        _super.call(this, 'Bitte antworten Sie etwas schneller.', 'NoAnswer');
     }
     return NoAnswerEvaluation;
 })(AnswerEvaluation);
@@ -61,7 +75,7 @@ var CorrectAnswerEvaluation = (function (_super) {
     * Constructor.
     */
     function CorrectAnswerEvaluation() {
-        _super.call(this, 'Gut: Ihre Antwort war richtig.');
+        _super.call(this, 'Gut: Ihre Antwort war richtig.', 'UnmarkedCorrectAnswer');
     }
     return CorrectAnswerEvaluation;
 })(AnswerEvaluation);
@@ -75,7 +89,7 @@ var WrongAnswerEvaluation = (function (_super) {
     * Constructor.
     */
     function WrongAnswerEvaluation() {
-        _super.call(this, 'Ihre Antwort war falsch.');
+        _super.call(this, 'Ihre Antwort war falsch.', 'UnmarkedWrongAnswer');
     }
     return WrongAnswerEvaluation;
 })(AnswerEvaluation);
@@ -89,7 +103,7 @@ var CorrectlyMarkedAnswerAsWrongEvaluation = (function (_super) {
     * Constructor.
     */
     function CorrectlyMarkedAnswerAsWrongEvaluation() {
-        _super.call(this, 'Gut: Sie haben bemerkt, dass Sie die falsche Antwort gegeben hatten.');
+        _super.call(this, 'Gut: Sie haben bemerkt, dass Sie die falsche Antwort gegeben hatten.', 'MarkedWrongAnswer');
     }
     return CorrectlyMarkedAnswerAsWrongEvaluation;
 })(AnswerEvaluation);
@@ -103,7 +117,7 @@ var WronglyMarkedAnswerAsWrongEvaluation = (function (_super) {
     * Constructor.
     */
     function WronglyMarkedAnswerAsWrongEvaluation() {
-        _super.call(this, 'Sie haben Ihre eigentlich richtige Antwort leider als Vertipper markiert.');
+        _super.call(this, 'Sie haben Ihre eigentlich richtige Antwort leider als Vertipper markiert.', 'MarkedCorrectAnswer');
     }
     return WronglyMarkedAnswerAsWrongEvaluation;
 })(AnswerEvaluation);

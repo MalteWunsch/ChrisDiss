@@ -182,7 +182,8 @@ function TestCtrl($scope, $timeout, $http) {
             'unmarkedWrongAnswers': $scope.testResult.getNumberOfUnmarkedWrongAnswers(),
             'markedCorrectAnswers': $scope.testResult.getNumberOfMarkedCorrectAnswers(),
             'unmarkedCorrectAnswers': $scope.testResult.getNumberOfUnmarkedCorrectAnswers(),
-            'noAnswers': $scope.testResult.getNumberOfNoAnswers()
+            'noAnswers': $scope.testResult.getNumberOfNoAnswers(),
+            'evaluationDetails': $scope.testResult.getAllAnswers()
         });
     };
 
