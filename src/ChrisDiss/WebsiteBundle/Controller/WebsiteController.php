@@ -2,6 +2,7 @@
 
 namespace ChrisDiss\WebsiteBundle\Controller;
 
+use ChrisDiss\WebsiteBundle\Entity\AnswerEvaluation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ChrisDiss\WebsiteBundle\Entity\User;
@@ -115,6 +116,14 @@ class WebsiteController extends Controller
              ->setUnmarkedCorrectAnswers((int) $request->get('unmarkedCorrectAnswers'))
              ->setNoAnswers((int) $request->get('noAnswers'))
              ->setCreatedAt(new \DateTime());
+        foreach (json_decode($request->get('evaluationDetails'), true) as $evaluationData) {
+            $answerEvaluation = new AnswerEvaluation(
+                $user,
+                $evaluationData['type'],
+                new \DateTime($evaluationData['createdAt'])
+            );
+            $user->addAnswerEvaluation($answerEvaluation);
+        }
 
         /* @var $om \Doctrine\Common\Persistence\ObjectManager */
         $om = $this->getDoctrine()
