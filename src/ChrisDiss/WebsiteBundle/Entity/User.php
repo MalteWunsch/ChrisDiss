@@ -2,6 +2,7 @@
 
 namespace ChrisDiss\WebsiteBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -89,6 +90,22 @@ class User
      * @var \DateTime
      */
     protected $createdAt;
+
+    /**
+     * Evaluations of the Answers this user has given.
+     *
+     * @ORM\OneToMany(targetEntity="AnswerEvaluation", mappedBy="user", cascade={"all"})
+     * @var AnswerEvaluation[]
+     **/
+    protected $answerEvaluations;
+
+    /**
+     * Constructor.
+     */
+    function __construct()
+    {
+        $this->answerEvaluations = new ArrayCollection();
+    }
 
     /**
      * Gets the artificial (Doctrine) id of the user.
@@ -252,5 +269,17 @@ class User
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Adds an $answerEvaluation.
+     *
+     * @param AnswerEvaluation $answerEvaluation
+     * @return $this fluent interface
+     */
+    public function addAnswerEvaluation(AnswerEvaluation $answerEvaluation)
+    {
+        $this->answerEvaluations->add($answerEvaluation);
+        return $this;
     }
 }
