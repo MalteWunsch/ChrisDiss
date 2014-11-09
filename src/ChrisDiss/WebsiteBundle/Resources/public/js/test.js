@@ -19,7 +19,7 @@ function TestCtrl($scope, $timeout, $http) {
     *
     * @type {number}
     */
-    $scope.maxNumberOfQuestionsInTest = 100;
+    $scope.maxNumberOfQuestionsInTest = 3;
 
     /**
     * Base controller with extracted commonalities between the dryRun- and test-Controller,
