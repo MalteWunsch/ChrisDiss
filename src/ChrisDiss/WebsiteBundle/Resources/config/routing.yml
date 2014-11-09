@@ -1,9 +1,9 @@
 vorUmfrage:
-    pattern: /vorumfrage
+    pattern: /
     defaults: { _controller: ChrisDissWebsiteBundle:Website:vorUmfrage }
 
 codeForm:
-    pattern:  /
+    pattern:  /fe
     defaults: { _controller: ChrisDissWebsiteBundle:Website:codeForm }
 
 instructions:
