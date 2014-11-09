@@ -136,9 +136,19 @@ class WebsiteController extends Controller
 
     /**
      * Redirect the user to the part taking place after this application.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function anschlussFragebogenAction()
     {
         return $this->redirect('https://umfrage.bibb.de/lime1/index.php?sid=15256&lang=de');
+    }
+
+    /**
+     * Redirect the user to the survey taking place prior to this application.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function vorUmfrageAction()
+    {
+        return $this->redirect('https://umfrage.bibb.de/lime1/index.php?sid=68975&lang=de');
     }
 }
